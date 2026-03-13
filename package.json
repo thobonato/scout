@@ -2,17 +2,16 @@
   "name": "scout",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "bun@1.2.4",
   "scripts": {
     "dev": "next dev",
-    "build": "bun run lint && next build",
+    "build": "eslint . && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,md}": "bunx prettier --write",
-    "*.{js,jsx,ts,tsx}": "bunx eslint --fix"
+    "*.{js,jsx,ts,tsx,json,css,md}": "prettier --write",
+    "*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "dependencies": {
     "next": "16.1.6",
