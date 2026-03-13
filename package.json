@@ -11,8 +11,8 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,md}": "prettier --write",
-    "*.{js,jsx,ts,tsx}": "eslint --fix"
+    "*.{js,jsx,ts,tsx,json,css,md}": "bunx prettier --write",
+    "*.{js,jsx,ts,tsx}": "bunx eslint --fix"
   },
   "dependencies": {
     "next": "16.1.6",
