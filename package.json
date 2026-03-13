@@ -2,6 +2,7 @@
   "name": "scout",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "bun@1.2.4",
   "scripts": {
     "dev": "next dev",
     "build": "bun run lint && next build",
