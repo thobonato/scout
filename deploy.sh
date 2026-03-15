@@ -14,7 +14,7 @@ echo "Updating and rebasing main branch..."
 git switch main
 git pull
 git rebase development
-git push
+git push --force-with-lease
 echo "Main branch updated and pushed successfully!"
 
 # Return to development branch
