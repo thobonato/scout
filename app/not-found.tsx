@@ -174,7 +174,7 @@ export default function NotFound() {
               color: "#1a1a2e",
             }}
           >
-            Looks like this page went walkies
+            Uh oh! We couldn&apos;t find this page.
           </h1>
         </div>
 
