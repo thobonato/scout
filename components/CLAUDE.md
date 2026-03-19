@@ -18,7 +18,7 @@ All design tokens are defined as CSS variables in `app/globals.css` and register
 | `--chewy-orange-dark` | `#d96310` | `bg-chewy-orange-dark`                  | Hover state for orange                |
 | `--cream`             | `#fff8f0` | `bg-cream`                              | Page background                       |
 | `--warm-white`        | `#fffcf8` | `bg-warm-white`                         | Card / surface background             |
-| `--text-dark`         | `#1a1a2e` | `text-text-dark`                        | Headings, primary text                |
+| `--text-dark`         | `#121212` | `text-text-dark`                        | Headings, primary text                |
 | `--text-mid`          | `#4a4a6a` | `text-text-mid`                         | Body text, descriptions               |
 | `--text-muted`        | `#7a7a9a` | `text-text-muted`                       | Captions, footer text                 |
 
@@ -183,7 +183,7 @@ Stagger animations with `animationDelay` for a polished entrance:
 
 ## What to Avoid
 
-- **No hardcoded hex values** in component files — use Tailwind classes (`text-chewy-blue`, not `text-[#00aeef]`)
+- **No hardcoded hex values** in component files — use Tailwind classes (`text-scout-blue`, not `text-[#1c49c2]`)
 - **No `var()` references in JSX** — use Tailwind classes; `var()` is only for SVG `fill`/`stroke` props that don't accept classes
 - **No dark backgrounds** — the design is light and warm
 - **No new colors** — if something feels missing, use opacity variants (`text-text-mid/70`, `bg-chewy-orange/10`)
