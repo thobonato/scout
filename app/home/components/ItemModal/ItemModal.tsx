@@ -27,7 +27,7 @@ export function ItemModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md rounded-2xl p-6 bg-cream">
+      <DialogContent className="sm:max-w-md rounded-2xl p-6 bg-cream border-0 shadow-lg">
         <DialogTitle className="sr-only">Item selection</DialogTitle>
         <ItemModalContent
           type={type}
