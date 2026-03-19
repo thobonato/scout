@@ -14,19 +14,19 @@ const CTA_CONFIG: Record<
   feed: {
     label: "Feed",
     emoji: "🍖",
-    accentBg: "bg-chewy-orange/8",
+    accentBg: "bg-chewy-orange/10",
     accentBorder: "hover:border-chewy-orange/30",
   },
   play: {
     label: "Play",
     emoji: "🎾",
-    accentBg: "bg-scout-blue/8",
+    accentBg: "bg-scout-blue/10",
     accentBorder: "hover:border-scout-blue/30",
   },
   medicine: {
     label: "Medicine",
     emoji: "💊",
-    accentBg: "bg-text-muted/8",
+    accentBg: "bg-text-muted/10",
     accentBorder: "hover:border-text-muted/30",
   },
 };

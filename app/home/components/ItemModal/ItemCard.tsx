@@ -15,8 +15,8 @@ export function ItemCard({ item, isSelected, onToggle }: ItemCardProps) {
       <button
         onClick={() => onToggle(item.id)}
         className={`
-          w-full bg-white rounded-xl p-3 border-2 cursor-pointer transition-all duration-150
-          flex flex-col items-center gap-1 text-center
+          w-full bg-white rounded-xl p-4 border-2 cursor-pointer transition-all duration-150
+          flex flex-col items-center gap-1.5 text-center
           ${isSelected ? "border-scout-blue bg-scout-blue/5 shadow-sm" : "border-black/[0.06] hover:border-scout-blue/20 hover:shadow-sm"}
         `}
       >
