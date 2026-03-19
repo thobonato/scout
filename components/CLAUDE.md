@@ -12,13 +12,13 @@ All design tokens are defined as CSS variables in `app/globals.css` and register
 
 | Token                 | Value     | Tailwind class                          | Use for                               |
 | --------------------- | --------- | --------------------------------------- | ------------------------------------- |
-| `--chewy-blue`        | `#00aeef` | `bg-chewy-blue` / `text-chewy-blue`     | Primary actions, links, brand accents |
-| `--chewy-blue-dark`   | `#0092cc` | `bg-chewy-blue-dark`                    | Hover state for blue                  |
+| `--scout-blue`        | `#1C49C2` | `bg-scout-blue` / `text-scout-blue`     | Primary actions, links, brand accents |
+| `--scout-blue-dark`   | `#1640a8` | `bg-scout-blue-dark`                    | Hover state for scout-blue            |
 | `--chewy-orange`      | `#f4791f` | `bg-chewy-orange` / `text-chewy-orange` | Secondary accents, highlights, badges |
 | `--chewy-orange-dark` | `#d96310` | `bg-chewy-orange-dark`                  | Hover state for orange                |
 | `--cream`             | `#fff8f0` | `bg-cream`                              | Page background                       |
 | `--warm-white`        | `#fffcf8` | `bg-warm-white`                         | Card / surface background             |
-| `--text-dark`         | `#1a1a2e` | `text-text-dark`                        | Headings, primary text                |
+| `--text-dark`         | `#121212` | `text-text-dark`                        | Headings, primary text                |
 | `--text-mid`          | `#4a4a6a` | `text-text-mid`                         | Body text, descriptions               |
 | `--text-muted`        | `#7a7a9a` | `text-text-muted`                       | Captions, footer text                 |
 
@@ -95,7 +95,7 @@ Always use rounded corners. The design is soft, not boxy.
 {
   /* Primary — blue, full pill */
 }
-<button className="bg-chewy-blue hover:bg-chewy-blue-dark text-white font-nunito font-bold px-6 py-3 rounded-full transition-colors">
+<button className="bg-scout-blue hover:bg-scout-blue-dark text-white font-nunito font-bold px-6 py-3 rounded-full transition-colors">
   Get Started
 </button>;
 
@@ -183,10 +183,41 @@ Stagger animations with `animationDelay` for a polished entrance:
 
 ## What to Avoid
 
-- **No hardcoded hex values** in component files — use Tailwind classes (`text-chewy-blue`, not `text-[#00aeef]`)
+- **No hardcoded hex values** in component files — use Tailwind classes (`text-scout-blue`, not `text-[#1c49c2]`)
 - **No `var()` references in JSX** — use Tailwind classes; `var()` is only for SVG `fill`/`stroke` props that don't accept classes
 - **No dark backgrounds** — the design is light and warm
 - **No new colors** — if something feels missing, use opacity variants (`text-text-mid/70`, `bg-chewy-orange/10`)
 - **No tight spacing** — when in doubt, add more padding
 - **No sharp corners** — always round them
 - **No heavy shadows** — use `shadow-sm` or `shadow-md` at most
+
+---
+
+## shadcn/ui Components
+
+Scout uses shadcn/ui. Generated components live in `components/ui/` — **never edit these files directly**.
+
+To extend a shadcn component, wrap it in a new component in `components/`:
+
+```tsx
+// components/PrimaryButton/PrimaryButton.tsx
+import { Button } from "@/components/ui/button";
+
+interface PrimaryButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+export function PrimaryButton({ children, onClick }: PrimaryButtonProps) {
+  return (
+    <Button
+      onClick={onClick}
+      className="bg-scout-blue hover:bg-scout-blue-dark text-white font-nunito font-bold rounded-full"
+    >
+      {children}
+    </Button>
+  );
+}
+```
+
+Available components: `dialog`, `sheet`, `badge`, `button`, `skeleton`.

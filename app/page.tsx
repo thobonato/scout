@@ -79,9 +79,9 @@ export default function Home() {
         >
           <div className="flex items-center gap-[10px] justify-center">
             <div className="animate-wag w-[42px] h-[42px]">
-              <PawIcon color="var(--chewy-blue)" opacity={1} />
+              <PawIcon color="var(--scout-blue)" opacity={1} />
             </div>
-            <span className="font-fredoka text-[2rem] font-semibold text-chewy-blue tracking-[-0.01em] leading-none">
+            <span className="font-fredoka text-[2rem] font-semibold text-scout-blue tracking-[-0.01em] leading-none">
               chewy
             </span>
           </div>
@@ -129,7 +129,7 @@ export default function Home() {
         >
           {[0, 1, 2].map((i) => (
             <div key={i} className="w-4 h-4 opacity-35">
-              <PawIcon color="var(--chewy-blue)" opacity={1} />
+              <PawIcon color="var(--scout-blue)" opacity={1} />
             </div>
           ))}
         </div>

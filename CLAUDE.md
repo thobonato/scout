@@ -1,3 +1,28 @@
+## Project Overview
+
+Scout is a Chewy product — an AI-powered pet care companion app.
+
+**What it does:**
+
+- Pet owners add their pets (name, breed, age, photo)
+- The app generates an AI avatar of the pet (fal.ai → Supabase storage)
+- Daily tracker: owners log food, play, and medicine each day (streak + progress UI)
+- AI recommendations: ranked toys and food products from the Chewy catalog, personalized to the pet
+- AI health insights: weekly summary card (food trend, exercise streak, med compliance) powered by an LLM
+- Sitter invite: owners can share a scoped link so a pet sitter can log daily activity
+
+**Tech stack highlights:**
+
+- Frontend: Next.js 16, TypeScript, Tailwind CSS 4, shadcn/ui
+- Backend: Supabase (Postgres + RLS + Storage), Next.js API routes
+- AI: fal.ai for avatar generation, OpenRouter/Groq LLM for recommendations + health insights
+
+**Phase 1 (Mar 23–27):** UI built against local mock data — no real API calls
+**Phase 2 (Mar 30–Apr 6):** Wire frontend to real Supabase + AI endpoints
+**Phase 3 (Apr 6–13):** Polish, demo prep, presentation
+
+---
+
 # Scout — Claude Code Guidelines
 
 ## Stack
@@ -215,3 +240,33 @@ export function UserCard({ name, email, isActive }: UserCardProps) {
   );
 }
 ```
+
+## Pre-Push Checklist
+
+Before pushing any code, review your changes against this checklist.
+
+### Code quality
+
+- [ ] Code is skimmable — a teammate can understand any function in seconds without asking
+- [ ] No clever one-liners, ternary chains, or non-obvious shortcuts
+- [ ] Early returns used — edge cases handled at the top, happy path at the bottom
+- [ ] Functions are not broken into too many small pieces — related logic stays together
+- [ ] No changes included that aren't strictly required for the task
+
+### State & types
+
+- [ ] State is minimized — arguments are narrowed, nothing is optional unless it truly can be absent
+- [ ] Discriminated unions used where a value can be one of several distinct types
+- [ ] All cases of a union or variant type are exhaustively handled — unknown types throw or assert
+- [ ] No defensive code — trust that values are what the types say they are
+- [ ] Asserts used when loading data that must exist, instead of try/catch or fallback defaults
+
+### Arguments & interfaces
+
+- [ ] Argument count is low — no unnecessary overrides or configuration options
+- [ ] No optional arguments that are actually always required
+- [ ] Highly opinionated about what gets passed around — if it must exist, require it
+
+### Lint & formatting
+
+- [ ] `pnpm lint` passes with no errors
