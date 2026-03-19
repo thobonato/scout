@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // shadcn/ui generated components — owned by project but not linted
+    "components/ui/**",
   ]),
   {
     rules: {
