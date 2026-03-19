@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Fredoka, Nunito, Geist } from "next/font/google";
+import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const fredoka = Fredoka({
   variable: "--font-fredoka",
@@ -28,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
+    <html lang="en">
       <body className={`${fredoka.variable} ${nunito.variable} antialiased`}>
         {children}
       </body>
