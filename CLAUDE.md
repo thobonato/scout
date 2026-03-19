@@ -1,3 +1,28 @@
+## Project Overview
+
+Scout is a Chewy product — an AI-powered pet care companion app.
+
+**What it does:**
+
+- Pet owners add their pets (name, breed, age, photo)
+- The app generates an AI avatar of the pet (fal.ai → Supabase storage)
+- Daily tracker: owners log food, play, and medicine each day (streak + progress UI)
+- AI recommendations: ranked toys and food products from the Chewy catalog, personalized to the pet
+- AI health insights: weekly summary card (food trend, exercise streak, med compliance) powered by an LLM
+- Sitter invite: owners can share a scoped link so a pet sitter can log daily activity
+
+**Tech stack highlights:**
+
+- Frontend: Next.js 16, TypeScript, Tailwind CSS 4, shadcn/ui
+- Backend: Supabase (Postgres + RLS + Storage), Next.js API routes
+- AI: fal.ai for avatar generation, OpenRouter/Groq LLM for recommendations + health insights
+
+**Phase 1 (Mar 23–27):** UI built against local mock data — no real API calls
+**Phase 2 (Mar 30–Apr 6):** Wire frontend to real Supabase + AI endpoints
+**Phase 3 (Apr 6–13):** Polish, demo prep, presentation
+
+---
+
 # Scout — Claude Code Guidelines
 
 ## Stack
