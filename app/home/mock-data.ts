@@ -1,4 +1,4 @@
-import type { Pet, FeedItem, ToyItem, MedicineItem } from "./types";
+import type { Pet, CategoryItem, MedicineItem } from "./types";
 
 export const mockPet: Pet = {
   name: "Biscuit",
@@ -7,7 +7,7 @@ export const mockPet: Pet = {
   avatarUrl: null,
 };
 
-export const feedItems: FeedItem[] = [
+export const feedItems: CategoryItem[] = [
   { id: "f1", name: "Chicken & Rice", emoji: "🍗", category: "Dry Food" },
   { id: "f2", name: "Salmon Pâté", emoji: "🐟", category: "Wet Food" },
   { id: "f3", name: "Peanut Butter Treat", emoji: "🥜", category: "Treats" },
@@ -16,7 +16,7 @@ export const feedItems: FeedItem[] = [
   { id: "f6", name: "Sweet Potato Chew", emoji: "🍠", category: "Treats" },
 ];
 
-export const toyItems: ToyItem[] = [
+export const toyItems: CategoryItem[] = [
   { id: "t1", name: "Rope Tugger", emoji: "🪢", category: "Tug Toys" },
   { id: "t2", name: "Tennis Ball", emoji: "🎾", category: "Fetch" },
   { id: "t3", name: "Squeaky Duck", emoji: "🦆", category: "Squeaky" },

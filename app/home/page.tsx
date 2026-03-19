@@ -46,6 +46,7 @@ export default function HomePage() {
       </div>
 
       <ItemModal
+        key={activeModal ?? "closed"}
         type={activeModal}
         petName={mockPet.name}
         items={activeModal ? MODAL_ITEMS[activeModal] : []}
