@@ -1,41 +1,53 @@
 "use client";
 
-export default function Home() {
-  const pawPrints = [
-    { top: "8%",  left: "5%",   size: 64,  delay: "0s",    dur: "7s",  rot: "15deg"  },
-    { top: "14%", left: "88%",  size: 48,  delay: "1.2s",  dur: "9s",  rot: "-20deg" },
-    { top: "32%", left: "3%",   size: 36,  delay: "2.1s",  dur: "11s", rot: "5deg"   },
-    { top: "55%", left: "92%",  size: 56,  delay: "0.6s",  dur: "8s",  rot: "-10deg" },
-    { top: "72%", left: "7%",   size: 44,  delay: "3s",    dur: "10s", rot: "25deg"  },
-    { top: "80%", left: "80%",  size: 52,  delay: "1.8s",  dur: "7.5s",rot: "-5deg"  },
-    { top: "88%", left: "45%",  size: 32,  delay: "4s",    dur: "12s", rot: "12deg"  },
-    { top: "22%", left: "48%",  size: 28,  delay: "5s",    dur: "14s", rot: "-18deg" },
-    { top: "62%", left: "55%",  size: 40,  delay: "2.5s",  dur: "9.5s",rot: "8deg"   },
-  ];
+const pawPrints = [
+  { top: "8%", left: "5%", size: 64, delay: "0s", dur: "7s", rot: "15deg" },
+  {
+    top: "14%",
+    left: "88%",
+    size: 48,
+    delay: "1.2s",
+    dur: "9s",
+    rot: "-20deg",
+  },
+  { top: "32%", left: "3%", size: 36, delay: "2.1s", dur: "11s", rot: "5deg" },
+  {
+    top: "55%",
+    left: "92%",
+    size: 56,
+    delay: "0.6s",
+    dur: "8s",
+    rot: "-10deg",
+  },
+  { top: "72%", left: "7%", size: 44, delay: "3s", dur: "10s", rot: "25deg" },
+  {
+    top: "80%",
+    left: "80%",
+    size: 52,
+    delay: "1.8s",
+    dur: "7.5s",
+    rot: "-5deg",
+  },
+  { top: "88%", left: "45%", size: 32, delay: "4s", dur: "12s", rot: "12deg" },
+  { top: "22%", left: "48%", size: 28, delay: "5s", dur: "14s", rot: "-18deg" },
+  {
+    top: "62%",
+    left: "55%",
+    size: 40,
+    delay: "2.5s",
+    dur: "9.5s",
+    rot: "8deg",
+  },
+];
 
+export default function Home() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(160deg, #fff8f0 0%, #fef3e2 50%, #fff0e8 100%)",
-        position: "relative",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: "var(--font-nunito)",
-      }}
-    >
+    <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-nunito">
       {/* Background noise texture */}
       <div
+        className="fixed inset-0 pointer-events-none z-0 opacity-40"
         style={{
-          position: "fixed",
-          inset: 0,
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E")`,
-          pointerEvents: "none",
-          zIndex: 0,
-          opacity: 0.4,
         }}
       />
 
@@ -43,9 +55,8 @@ export default function Home() {
       {pawPrints.map((p, i) => (
         <div
           key={i}
-          className="paw-bg"
+          className="paw-bg fixed pointer-events-none z-0"
           style={{
-            position: "fixed",
             top: p.top,
             left: p.left,
             width: p.size,
@@ -53,129 +64,59 @@ export default function Home() {
             animationDelay: p.delay,
             animationDuration: p.dur,
             transform: `rotate(${p.rot})`,
-            zIndex: 0,
-            pointerEvents: "none",
           }}
         >
-          <PawIcon color="#f4791f" opacity={1} />
+          <PawIcon color="var(--chewy-orange)" opacity={1} />
         </div>
       ))}
 
       {/* Main content */}
-      <div
-        style={{
-          position: "relative",
-          zIndex: 10,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          textAlign: "center",
-          padding: "2rem",
-          gap: "0rem",
-        }}
-      >
+      <div className="relative z-10 flex flex-col items-center text-center p-8">
         {/* Chewy logo lockup */}
         <div
-          className="animate-fade-up"
-          style={{ animationDelay: "0.1s", marginBottom: "2.5rem" }}
+          className="animate-fade-up mb-10"
+          style={{ animationDelay: "0.1s" }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              justifyContent: "center",
-            }}
-          >
-            {/* Paw logo */}
-            <div className="animate-wag" style={{ width: 42, height: 42 }}>
-              <PawIcon color="#00aeef" opacity={1} />
+          <div className="flex items-center gap-[10px] justify-center">
+            <div className="animate-wag w-[42px] h-[42px]">
+              <PawIcon color="var(--chewy-blue)" opacity={1} />
             </div>
-            {/* chewy wordmark */}
-            <span
-              style={{
-                fontFamily: "var(--font-fredoka)",
-                fontSize: "2rem",
-                fontWeight: 600,
-                color: "#00aeef",
-                letterSpacing: "-0.01em",
-                lineHeight: 1,
-              }}
-            >
+            <span className="font-fredoka text-[2rem] font-semibold text-chewy-blue tracking-[-0.01em] leading-none">
               chewy
             </span>
           </div>
         </div>
 
-        {/* Eyebrow text */}
+        {/* Eyebrow badge */}
         <div
-          className="animate-fade-up"
-          style={{ animationDelay: "0.25s", marginBottom: "0.75rem" }}
+          className="animate-fade-up mb-3"
+          style={{ animationDelay: "0.25s" }}
         >
-          <span
-            style={{
-              fontFamily: "var(--font-nunito)",
-              fontSize: "0.85rem",
-              fontWeight: 700,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "#f4791f",
-              background: "rgba(244,121,31,0.10)",
-              border: "1.5px solid rgba(244,121,31,0.25)",
-              padding: "4px 14px",
-              borderRadius: "999px",
-            }}
-          >
+          <span className="font-nunito text-[0.85rem] font-bold tracking-[0.18em] uppercase text-chewy-orange bg-chewy-orange/10 border-[1.5px] border-chewy-orange/25 px-[14px] py-[4px] rounded-full">
             introducing
           </span>
         </div>
 
         {/* Hero title */}
-        <div
-          className="animate-pop-in"
-          style={{ animationDelay: "0.4s", marginBottom: "1.2rem" }}
-        >
+        <div className="animate-pop-in mb-5" style={{ animationDelay: "0.4s" }}>
           <h1
-            style={{
-              fontFamily: "var(--font-fredoka)",
-              fontSize: "clamp(5rem, 18vw, 10rem)",
-              fontWeight: 700,
-              lineHeight: 0.92,
-              letterSpacing: "-0.02em",
-              color: "#1a1a2e",
-              position: "relative",
-            }}
+            className="font-fredoka font-bold leading-[0.92] tracking-[-0.02em] text-text-dark relative"
+            style={{ fontSize: "clamp(5rem, 18vw, 10rem)" }}
           >
             Scout
             {/* Orange accent dot */}
-            <span
-              style={{
-                display: "inline-block",
-                width: "0.18em",
-                height: "0.18em",
-                background: "#f4791f",
-                borderRadius: "50%",
-                verticalAlign: "top",
-                marginTop: "0.12em",
-                marginLeft: "0.04em",
-              }}
-            />
+            <span className="inline-block w-[0.18em] h-[0.18em] bg-chewy-orange rounded-full align-top mt-[0.12em] ml-[0.04em]" />
           </h1>
         </div>
 
         {/* Subheadline */}
         <div
-          className="animate-fade-up"
-          style={{ animationDelay: "0.6s", marginBottom: "1rem" }}
+          className="animate-fade-up mb-4"
+          style={{ animationDelay: "0.6s" }}
         >
           <p
-            style={{
-              fontFamily: "var(--font-fredoka)",
-              fontSize: "clamp(1.4rem, 4vw, 2rem)",
-              fontWeight: 400,
-              color: "#4a4a6a",
-              letterSpacing: "-0.01em",
-            }}
+            className="font-fredoka font-normal text-text-mid tracking-[-0.01em]"
+            style={{ fontSize: "clamp(1.4rem, 4vw, 2rem)" }}
           >
             is coming soon
           </p>
@@ -183,36 +124,24 @@ export default function Home() {
 
         {/* Divider paws */}
         <div
-          className="animate-fade-in"
-          style={{
-            animationDelay: "0.75s",
-            display: "flex",
-            gap: "8px",
-            alignItems: "center",
-            margin: "1.2rem 0",
-          }}
+          className="animate-fade-in flex gap-2 items-center my-5"
+          style={{ animationDelay: "0.75s" }}
         >
           {[0, 1, 2].map((i) => (
-            <div key={i} style={{ width: 16, height: 16, opacity: 0.35 }}>
-              <PawIcon color="#00aeef" opacity={1} />
+            <div key={i} className="w-4 h-4 opacity-35">
+              <PawIcon color="var(--chewy-blue)" opacity={1} />
             </div>
           ))}
         </div>
 
         {/* Tagline */}
         <div
-          className="animate-fade-up"
-          style={{ animationDelay: "0.85s", marginBottom: "2.5rem" }}
+          className="animate-fade-up mb-10"
+          style={{ animationDelay: "0.85s" }}
         >
           <p
-            style={{
-              fontFamily: "var(--font-nunito)",
-              fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
-              fontWeight: 600,
-              color: "#7a7a9a",
-              maxWidth: "420px",
-              lineHeight: 1.6,
-            }}
+            className="font-nunito font-semibold text-text-muted max-w-[420px] leading-relaxed"
+            style={{ fontSize: "clamp(1rem, 2.5vw, 1.2rem)" }}
           >
             Your pet&apos;s new best friend is almost here.
             <br />
@@ -223,47 +152,29 @@ export default function Home() {
 
       {/* Bottom strip */}
       <div
-        className="animate-fade-in"
-        style={{
-          animationDelay: "1.3s",
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          padding: "16px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "8px",
-          background: "rgba(255,248,240,0.6)",
-          backdropFilter: "blur(12px)",
-          borderTop: "1px solid rgba(244,121,31,0.1)",
-          zIndex: 20,
-        }}
+        className="animate-fade-in fixed bottom-0 left-0 right-0 px-4 py-4 flex justify-center items-center gap-2 bg-cream/60 backdrop-blur-md border-t border-chewy-orange/10 z-20"
+        style={{ animationDelay: "1.3s" }}
       >
-        <div style={{ width: 14, height: 14, opacity: 0.5 }}>
-          <PawIcon color="#f4791f" opacity={1} />
+        <div className="w-[14px] h-[14px] opacity-50">
+          <PawIcon color="var(--chewy-orange)" opacity={1} />
         </div>
-        <p
-          style={{
-            fontFamily: "var(--font-nunito)",
-            fontSize: "0.8rem",
-            fontWeight: 700,
-            color: "#9a9ab0",
-            letterSpacing: "0.06em",
-          }}
-        >
+        <p className="font-nunito text-[0.8rem] font-bold text-text-muted tracking-[0.06em]">
           a chewy product &nbsp;·&nbsp; good things take time
         </p>
-        <div style={{ width: 14, height: 14, opacity: 0.5 }}>
-          <PawIcon color="#f4791f" opacity={1} />
+        <div className="w-[14px] h-[14px] opacity-50">
+          <PawIcon color="var(--chewy-orange)" opacity={1} />
         </div>
       </div>
     </div>
   );
 }
 
-function PawIcon({ color, opacity }: { color: string; opacity: number }) {
+interface PawIconProps {
+  color: string;
+  opacity: number;
+}
+
+function PawIcon({ color, opacity }: PawIconProps) {
   return (
     <svg
       viewBox="0 0 100 100"

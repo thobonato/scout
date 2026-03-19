@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* ── Brand design tokens ── */
 :root {
   --chewy-blue: #00aeef;
   --chewy-blue-dark: #0092cc;
@@ -9,8 +10,27 @@
   --warm-white: #fffcf8;
   --text-dark: #1a1a2e;
   --text-mid: #4a4a6a;
-  --font-fredoka: "Fredoka", sans-serif;
-  --font-nunito: "Nunito", sans-serif;
+  --text-muted: #7a7a9a;
+}
+
+/*
+  Registers CSS variables as Tailwind utilities.
+  This lets you write bg-chewy-blue, text-chewy-orange, font-fredoka, etc.
+  instead of bg-[var(--chewy-blue)].
+  Font variables (--font-fredoka, --font-nunito) are set at runtime by Next.js.
+*/
+@theme inline {
+  --color-chewy-blue: var(--chewy-blue);
+  --color-chewy-blue-dark: var(--chewy-blue-dark);
+  --color-chewy-orange: var(--chewy-orange);
+  --color-chewy-orange-dark: var(--chewy-orange-dark);
+  --color-cream: var(--cream);
+  --color-warm-white: var(--warm-white);
+  --color-text-dark: var(--text-dark);
+  --color-text-mid: var(--text-mid);
+  --color-text-muted: var(--text-muted);
+  --font-fredoka: var(--font-fredoka);
+  --font-nunito: var(--font-nunito);
 }
 
 * {
@@ -26,45 +46,101 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Page background ── */
+/* Used on full-page wrappers for the warm gradient background */
+.bg-page {
+  background: linear-gradient(160deg, #fff8f0 0%, #fef3e2 50%, #fff0e8 100%);
+}
+
 /* ── Paw float animations ── */
 @keyframes float-paw {
-  0%   { transform: translateY(0px) rotate(0deg); opacity: 0.06; }
-  50%  { transform: translateY(-18px) rotate(8deg); opacity: 0.1; }
-  100% { transform: translateY(0px) rotate(0deg); opacity: 0.06; }
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.06;
+  }
+  50% {
+    transform: translateY(-18px) rotate(8deg);
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.06;
+  }
 }
 
 @keyframes drift {
-  0%   { transform: translate(0, 0) rotate(-5deg); opacity: 0.05; }
-  33%  { transform: translate(8px, -12px) rotate(5deg); opacity: 0.09; }
-  66%  { transform: translate(-6px, 6px) rotate(-2deg); opacity: 0.06; }
-  100% { transform: translate(0, 0) rotate(-5deg); opacity: 0.05; }
+  0% {
+    transform: translate(0, 0) rotate(-5deg);
+    opacity: 0.05;
+  }
+  33% {
+    transform: translate(8px, -12px) rotate(5deg);
+    opacity: 0.09;
+  }
+  66% {
+    transform: translate(-6px, 6px) rotate(-2deg);
+    opacity: 0.06;
+  }
+  100% {
+    transform: translate(0, 0) rotate(-5deg);
+    opacity: 0.05;
+  }
 }
 
 /* ── Reveal animations ── */
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes pop-in {
-  0%   { opacity: 0; transform: scale(0.7) translateY(12px); }
-  70%  { transform: scale(1.04) translateY(-2px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(12px);
+  }
+  70% {
+    transform: scale(1.04) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @keyframes wag {
-  0%, 100% { transform: rotate(-3deg); }
-  50%       { transform: rotate(3deg); }
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
 }
 
 @keyframes pulse-ring {
-  0%   { transform: scale(1); opacity: 0.4; }
-  100% { transform: scale(1.6); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
 }
 
 .animate-fade-up {
