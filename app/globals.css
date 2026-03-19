@@ -2,26 +2,40 @@
 
 /* ── Brand design tokens ── */
 :root {
-  --chewy-blue: #00aeef;
-  --chewy-blue-dark: #0092cc;
+  --scout-blue: #1c49c2;
+  --scout-blue-dark: #1640a8;
   --chewy-orange: #f4791f;
   --chewy-orange-dark: #d96310;
   --cream: #fff8f0;
   --warm-white: #fffcf8;
-  --text-dark: #1a1a2e;
+  --text-dark: #121212;
   --text-mid: #4a4a6a;
   --text-muted: #7a7a9a;
+
+  /* shadcn/ui variables — values in HSL so shadcn components resolve hsl(var(--primary)) correctly */
+  --background: 33 100% 97%;
+  --foreground: 0 0% 7%;
+  --card: 33 60% 99%;
+  --card-foreground: 0 0% 7%;
+  --primary: 222 75% 42%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 33 30% 95%;
+  --muted-foreground: 240 13% 54%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 222 75% 42%;
+  --radius: 1rem;
 }
 
 /*
   Registers CSS variables as Tailwind utilities.
-  This lets you write bg-chewy-blue, text-chewy-orange, font-fredoka, etc.
-  instead of bg-[var(--chewy-blue)].
+  This lets you write bg-scout-blue, text-chewy-orange, font-fredoka, etc.
+  instead of bg-[var(--scout-blue)].
   Font variables (--font-fredoka, --font-nunito) are set at runtime by Next.js.
 */
 @theme inline {
-  --color-chewy-blue: var(--chewy-blue);
-  --color-chewy-blue-dark: var(--chewy-blue-dark);
+  --color-scout-blue: var(--scout-blue);
+  --color-scout-blue-dark: var(--scout-blue-dark);
   --color-chewy-orange: var(--chewy-orange);
   --color-chewy-orange-dark: var(--chewy-orange-dark);
   --color-cream: var(--cream);
