@@ -42,8 +42,8 @@ export function ItemModalContent({
   const hasSelection = selectedIds.length > 0;
 
   return (
-    <div className="flex flex-col gap-6">
-      <h2 className="font-fredoka text-xl font-semibold text-text-dark">
+    <div className="flex flex-col gap-5">
+      <h2 className="font-fredoka text-lg font-semibold text-text-dark">
         {MODAL_TITLE[type](petName)}
       </h2>
 
@@ -57,11 +57,11 @@ export function ItemModalContent({
         onClick={handleConfirm}
         disabled={!hasSelection}
         className={`
-          w-full font-nunito font-bold py-3 rounded-full transition-colors
+          w-full font-nunito font-bold py-3 rounded-full transition-all duration-200 text-sm
           ${
             hasSelection
-              ? "bg-scout-blue hover:bg-scout-blue-dark text-white cursor-pointer"
-              : "bg-scout-blue/30 text-white cursor-not-allowed"
+              ? "bg-scout-blue hover:bg-scout-blue-dark text-white cursor-pointer shadow-md"
+              : "bg-scout-blue/20 text-scout-blue/40 cursor-not-allowed"
           }
         `}
       >

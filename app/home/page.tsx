@@ -29,11 +29,11 @@ export default function HomePage() {
   const ctaTypes: Exclude<ModalType, null>[] = ["feed", "play", "medicine"];
 
   return (
-    <div className="bg-page min-h-screen">
-      <div className="max-w-md sm:max-w-lg mx-auto px-4 py-12 flex flex-col gap-8">
+    <div className="bg-page min-h-screen font-nunito">
+      <div className="max-w-sm sm:max-w-md mx-auto px-5 py-16 flex flex-col items-center gap-10">
         <PetAvatar pet={mockPet} />
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="w-full grid grid-cols-3 gap-4">
           {ctaTypes.map((type) => (
             <PetCTACard
               key={type}

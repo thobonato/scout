@@ -14,36 +14,26 @@
   --text-mid: #4a4a6a;
   --text-muted: #7a7a9a;
 
-  /* shadcn/ui variables — values in HSL so shadcn components resolve hsl(var(--primary)) correctly */
-  --background: 33 100% 97%;
-  --foreground: 0 0% 7%;
-  --card: 33 60% 99%;
-  --card-foreground: 0 0% 7%;
-  --primary: 222 75% 42%;
-  --primary-foreground: 0 0% 100%;
-  --muted: 33 30% 95%;
-  --muted-foreground: 240 13% 54%;
-  --border: 0 0% 90%;
-  --input: 0 0% 90%;
-  --ring: 222 75% 42%;
+  /* shadcn/ui variables — must be valid CSS colors for Tailwind v4 @theme inline */
+  --background: #fff8f0;
+  --foreground: #121212;
+  --card: #ffffff;
+  --card-foreground: #121212;
+  --primary: #1c49c2;
+  --primary-foreground: #ffffff;
+  --muted: #ede8e1;
+  --muted-foreground: #7a7a9a;
+  --border: #e5e0d8;
+  --input: #e5e0d8;
+  --ring: #1c49c2;
   --radius: 1rem;
-
-  /* Additional shadcn variables */
-  --popover: 33 60% 99%;
-  --popover-foreground: 0 0% 7%;
-  --secondary: 33 30% 95%;
-  --secondary-foreground: 222 75% 42%;
-  --accent: 33 30% 95%;
-  --accent-foreground: 222 75% 42%;
-  --destructive: 0 84% 60%;
-  --sidebar: 33 60% 99%;
-  --sidebar-foreground: 0 0% 7%;
-  --sidebar-primary: 222 75% 42%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 33 30% 95%;
-  --sidebar-accent-foreground: 222 75% 42%;
-  --sidebar-border: 0 0% 90%;
-  --sidebar-ring: 222 75% 42%;
+  --popover: #ffffff;
+  --popover-foreground: #121212;
+  --secondary: #f0ebe4;
+  --secondary-foreground: #1c49c2;
+  --accent: #f0ebe4;
+  --accent-foreground: #1c49c2;
+  --destructive: #ef4444;
 }
 
 /*
@@ -65,14 +55,6 @@
   --font-fredoka: var(--font-fredoka);
   --font-nunito: var(--font-nunito);
   --font-sans: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);

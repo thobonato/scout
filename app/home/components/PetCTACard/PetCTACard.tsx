@@ -9,22 +9,25 @@ interface PetCTACardProps {
 
 const CTA_CONFIG: Record<
   Exclude<ModalType, null>,
-  { label: string; emoji: string; hoverBorder: string }
+  { label: string; emoji: string; accentBg: string; accentBorder: string }
 > = {
   feed: {
     label: "Feed",
     emoji: "🍖",
-    hoverBorder: "hover:border-chewy-orange/40",
+    accentBg: "bg-chewy-orange/8",
+    accentBorder: "hover:border-chewy-orange/30",
   },
   play: {
     label: "Play",
     emoji: "🎾",
-    hoverBorder: "hover:border-scout-blue/40",
+    accentBg: "bg-scout-blue/8",
+    accentBorder: "hover:border-scout-blue/30",
   },
   medicine: {
     label: "Medicine",
     emoji: "💊",
-    hoverBorder: "hover:border-text-muted/40",
+    accentBg: "bg-text-muted/8",
+    accentBorder: "hover:border-text-muted/30",
   },
 };
 
@@ -36,13 +39,17 @@ export function PetCTACard({ type, onClick, isLogged }: PetCTACardProps) {
       <button
         onClick={onClick}
         className={`
-          w-full bg-warm-white rounded-2xl p-4 shadow-sm border-2 border-black/5
-          flex flex-col items-center gap-2 cursor-pointer
-          hover:scale-[1.03] hover:shadow-md transition-all duration-150
-          ${config.hoverBorder}
+          w-full bg-white rounded-2xl p-5 shadow-md border border-black/[0.06]
+          flex flex-col items-center gap-3 cursor-pointer
+          hover:scale-[1.04] hover:shadow-lg transition-all duration-200
+          ${config.accentBorder}
         `}
       >
-        <span className="text-3xl">{config.emoji}</span>
+        <div
+          className={`w-14 h-14 rounded-xl ${config.accentBg} flex items-center justify-center`}
+        >
+          <span className="text-2xl">{config.emoji}</span>
+        </div>
         <span className="font-nunito font-bold text-sm text-text-dark">
           {config.label}
         </span>
