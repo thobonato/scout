@@ -7,14 +7,8 @@ export interface Pet {
 
 export type ModalType = "feed" | "play" | "medicine" | null;
 
-export interface FeedItem {
-  id: string;
-  name: string;
-  emoji: string;
-  category: string;
-}
-
-export interface ToyItem {
+// FeedItem and ToyItem share the same shape — both have a category label
+export interface CategoryItem {
   id: string;
   name: string;
   emoji: string;
@@ -28,4 +22,4 @@ export interface MedicineItem {
   notes: string;
 }
 
-export type AnyItem = FeedItem | ToyItem | MedicineItem;
+export type AnyItem = CategoryItem | MedicineItem;

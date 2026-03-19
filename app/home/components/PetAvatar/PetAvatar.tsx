@@ -8,6 +8,7 @@ interface PetAvatarProps {
 export function PetAvatar({ pet }: PetAvatarProps) {
   return (
     <div className="flex flex-col items-center gap-2">
+      {/* TODO: Phase 2 — replace skeleton with <Image> when pet.avatarUrl is populated */}
       <Skeleton className="w-32 h-32 rounded-full" />
 
       <p className="font-nunito text-xs text-text-muted">
