@@ -6,40 +6,50 @@ Scout is a Chewy product. The design should feel warm, friendly, and minimal —
 
 ## Brand Tokens
 
-All design tokens are defined as CSS variables in `app/globals.css`. **Always use these variables — never hardcode colors or fonts.**
+All design tokens are defined as CSS variables in `app/globals.css` and registered as Tailwind utilities via `@theme inline`. **Always use the Tailwind classes — never hardcode hex values.**
 
 ### Colors
 
-```css
---chewy-blue: #00aeef /* primary actions, links, brand accents */
-  --chewy-blue-dark: #0092cc /* hover state for blue */ --chewy-orange: #f4791f
-  /* secondary accents, highlights, badges */ --chewy-orange-dark: #d96310
-  /* hover state for orange */ --cream: #fff8f0 /* page background */
-  --warm-white: #fffcf8 /* card / surface background */ --text-dark: #1a1a2e
-  /* headings, primary text */ --text-mid: #4a4a6a /* body text, descriptions */;
-```
+| Token                 | Value     | Tailwind class                          | Use for                               |
+| --------------------- | --------- | --------------------------------------- | ------------------------------------- |
+| `--chewy-blue`        | `#00aeef` | `bg-chewy-blue` / `text-chewy-blue`     | Primary actions, links, brand accents |
+| `--chewy-blue-dark`   | `#0092cc` | `bg-chewy-blue-dark`                    | Hover state for blue                  |
+| `--chewy-orange`      | `#f4791f` | `bg-chewy-orange` / `text-chewy-orange` | Secondary accents, highlights, badges |
+| `--chewy-orange-dark` | `#d96310` | `bg-chewy-orange-dark`                  | Hover state for orange                |
+| `--cream`             | `#fff8f0` | `bg-cream`                              | Page background                       |
+| `--warm-white`        | `#fffcf8` | `bg-warm-white`                         | Card / surface background             |
+| `--text-dark`         | `#1a1a2e` | `text-text-dark`                        | Headings, primary text                |
+| `--text-mid`          | `#4a4a6a` | `text-text-mid`                         | Body text, descriptions               |
+| `--text-muted`        | `#7a7a9a` | `text-text-muted`                       | Captions, footer text                 |
 
-In Tailwind, reference them with arbitrary values:
+Use Tailwind's `/` opacity modifier for transparent variants:
 
 ```tsx
-<p className="text-[var(--text-dark)]">...</p>
-<div className="bg-[var(--warm-white)]">...</div>
-<button className="bg-[var(--chewy-blue)] hover:bg-[var(--chewy-blue-dark)]">...</button>
+<div className="bg-chewy-orange/10 border border-chewy-orange/25">  {/* tinted badge background */}
+<div className="bg-cream/60 backdrop-blur-md">                      {/* frosted glass strip */}
 ```
 
 ### Fonts
 
-```css
---font-fredoka   /* display, headings, brand text */
---font-nunito    /* body, labels, UI text */
-```
+| Token            | Use for                       | Tailwind class |
+| ---------------- | ----------------------------- | -------------- |
+| `--font-fredoka` | Display, headings, brand text | `font-fredoka` |
+| `--font-nunito`  | Body, labels, UI text         | `font-nunito`  |
 
 ```tsx
-<h1 className="font-[family-name:var(--font-fredoka)]">Scout</h1>
-<p  className="font-[family-name:var(--font-nunito)]">Your pet's new best friend.</p>
+<h1 className="font-fredoka">Scout</h1>
+<p  className="font-nunito">Your pet's new best friend.</p>
 ```
 
 **Rule of thumb:** Fredoka for anything big and expressive. Nunito for everything else.
+
+### Page background
+
+Use the `.bg-page` utility class for full-page wrappers — it applies the warm gradient:
+
+```tsx
+<div className="bg-page min-h-screen">
+```
 
 ---
 
@@ -85,21 +95,21 @@ Always use rounded corners. The design is soft, not boxy.
 {
   /* Primary — blue, full pill */
 }
-<button className="bg-[var(--chewy-blue)] hover:bg-[var(--chewy-blue-dark)] text-white font-[family-name:var(--font-nunito)] font-bold px-6 py-3 rounded-full transition-colors">
+<button className="bg-chewy-blue hover:bg-chewy-blue-dark text-white font-nunito font-bold px-6 py-3 rounded-full transition-colors">
   Get Started
 </button>;
 
 {
   /* Secondary — orange outline */
 }
-<button className="border-2 border-[var(--chewy-orange)] text-[var(--chewy-orange)] hover:bg-[var(--chewy-orange)] hover:text-white font-[family-name:var(--font-nunito)] font-bold px-6 py-3 rounded-full transition-colors">
+<button className="border-2 border-chewy-orange text-chewy-orange hover:bg-chewy-orange hover:text-white font-nunito font-bold px-6 py-3 rounded-full transition-colors">
   Learn More
 </button>;
 
 {
   /* Ghost — subtle */
 }
-<button className="text-[var(--text-mid)] hover:text-[var(--text-dark)] font-[family-name:var(--font-nunito)] font-semibold px-4 py-2 rounded-full hover:bg-black/5 transition-colors">
+<button className="text-text-mid hover:text-text-dark font-nunito font-semibold px-4 py-2 rounded-full hover:bg-black/5 transition-colors">
   Cancel
 </button>;
 ```
@@ -111,7 +121,7 @@ Always use rounded corners. The design is soft, not boxy.
 Cards use warm-white backgrounds with a soft shadow and no harsh borders.
 
 ```tsx
-<div className="bg-[var(--warm-white)] rounded-2xl p-6 shadow-sm border border-black/5">
+<div className="bg-warm-white rounded-2xl p-6 shadow-sm border border-black/5">
   ...
 </div>
 ```
@@ -119,7 +129,7 @@ Cards use warm-white backgrounds with a soft shadow and no harsh borders.
 For a slightly elevated feel:
 
 ```tsx
-<div className="bg-[var(--warm-white)] rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow">
+<div className="bg-warm-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow">
   ...
 </div>
 ```
@@ -151,28 +161,32 @@ Stagger animations with `animationDelay` for a polished entrance:
 
 ```tsx
 {/* Display / hero */}
-<h1 className="font-[family-name:var(--font-fredoka)] text-6xl font-bold tracking-tight text-[var(--text-dark)]">
+<h1 className="font-fredoka text-6xl font-bold tracking-tight text-text-dark">
 
 {/* Section heading */}
-<h2 className="font-[family-name:var(--font-fredoka)] text-3xl font-semibold text-[var(--text-dark)]">
+<h2 className="font-fredoka text-3xl font-semibold text-text-dark">
 
 {/* Subheading */}
-<h3 className="font-[family-name:var(--font-nunito)] text-xl font-bold text-[var(--text-dark)]">
+<h3 className="font-nunito text-xl font-bold text-text-dark">
 
 {/* Body */}
-<p className="font-[family-name:var(--font-nunito)] text-base text-[var(--text-mid)] leading-relaxed">
+<p className="font-nunito text-base text-text-mid leading-relaxed">
 
 {/* Label / badge */}
-<span className="font-[family-name:var(--font-nunito)] text-sm font-bold uppercase tracking-widest text-[var(--chewy-orange)]">
+<span className="font-nunito text-sm font-bold uppercase tracking-widest text-chewy-orange">
+
+{/* Caption / muted */}
+<p className="font-nunito text-sm text-text-muted">
 ```
 
 ---
 
 ## What to Avoid
 
-- **No hardcoded hex values** in component files — use CSS variables
+- **No hardcoded hex values** in component files — use Tailwind classes (`text-chewy-blue`, not `text-[#00aeef]`)
+- **No `var()` references in JSX** — use Tailwind classes; `var()` is only for SVG `fill`/`stroke` props that don't accept classes
 - **No dark backgrounds** — the design is light and warm
-- **No new colors** — if something feels missing, use opacity variants of existing tokens (e.g. `rgba(var(--chewy-blue), 0.1)` or Tailwind's `/10` opacity modifier)
+- **No new colors** — if something feels missing, use opacity variants (`text-text-mid/70`, `bg-chewy-orange/10`)
 - **No tight spacing** — when in doubt, add more padding
 - **No sharp corners** — always round them
 - **No heavy shadows** — use `shadow-sm` or `shadow-md` at most
