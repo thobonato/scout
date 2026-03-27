@@ -38,7 +38,7 @@ export default function CreateDogPage() {
             Create Dog Profile
           </h1>
           <p className="font-nunito text-base text-text-mid max-w-sm text-center leading-relaxed">
-            Tell us about your pup so we can set up their care routine.
+            Tell us about your pup so we can build their care routine.
           </p>
         </div>
 
