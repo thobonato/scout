@@ -1,76 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-
-const pawPrints = [
-  { top: "8%", left: "5%", size: 64, delay: "0s", dur: "7s", rot: "15deg" },
-  {
-    top: "14%",
-    left: "88%",
-    size: 48,
-    delay: "1.2s",
-    dur: "9s",
-    rot: "-20deg",
-  },
-  { top: "32%", left: "3%", size: 36, delay: "2.1s", dur: "11s", rot: "5deg" },
-  {
-    top: "55%",
-    left: "92%",
-    size: 56,
-    delay: "0.6s",
-    dur: "8s",
-    rot: "-10deg",
-  },
-  { top: "72%", left: "7%", size: 44, delay: "3s", dur: "10s", rot: "25deg" },
-  {
-    top: "80%",
-    left: "80%",
-    size: 52,
-    delay: "1.8s",
-    dur: "7.5s",
-    rot: "-5deg",
-  },
-  { top: "88%", left: "45%", size: 32, delay: "4s", dur: "12s", rot: "12deg" },
-  { top: "22%", left: "48%", size: 28, delay: "5s", dur: "14s", rot: "-18deg" },
-  {
-    top: "62%",
-    left: "55%",
-    size: 40,
-    delay: "2.5s",
-    dur: "9.5s",
-    rot: "8deg",
-  },
-];
+import { PawIcon } from "@/components/PawIcon/PawIcon";
+import { PageBackground } from "@/components/PageBackground/PageBackground";
+import { BottomStrip } from "@/components/BottomStrip/BottomStrip";
 
 export default function Home() {
   return (
     <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-nunito">
-      {/* Background noise texture */}
-      <div
-        className="fixed inset-0 pointer-events-none z-0 opacity-40"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E")`,
-        }}
-      />
-
-      {/* Floating background paw prints */}
-      {pawPrints.map((p, i) => (
-        <div
-          key={i}
-          className="paw-bg fixed pointer-events-none z-0"
-          style={{
-            top: p.top,
-            left: p.left,
-            width: p.size,
-            height: p.size,
-            animationDelay: p.delay,
-            animationDuration: p.dur,
-            transform: `rotate(${p.rot})`,
-          }}
-        >
-          <PawIcon color="var(--chewy-orange)" opacity={1} />
-        </div>
-      ))}
+      <PageBackground />
 
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center text-center p-8">
@@ -120,7 +58,7 @@ export default function Home() {
             className="font-fredoka font-normal text-text-mid tracking-[-0.01em]"
             style={{ fontSize: "clamp(1.4rem, 4vw, 2rem)" }}
           >
-            is coming soon
+            Your pet&apos;s new best friend
           </p>
         </div>
 
@@ -155,51 +93,26 @@ export default function Home() {
             className="font-nunito font-semibold text-text-muted max-w-[420px] leading-relaxed"
             style={{ fontSize: "clamp(1rem, 2.5vw, 1.2rem)" }}
           >
-            Your pet&apos;s new best friend is almost here.
-            <br />
-            We&apos;re building something good.
+            Create a routine for your dog, share it with your sitter, and watch
+            them come to life.
           </p>
         </div>
+
+        {/* CTA Button */}
+        <div className="animate-fade-up" style={{ animationDelay: "1s" }}>
+          <a
+            href="/create-dog"
+            className="inline-flex items-center gap-2 bg-chewy-blue hover:bg-chewy-blue-dark text-white font-nunito font-bold px-8 py-4 rounded-full transition-colors text-lg shadow-md hover:shadow-lg"
+          >
+            <span className="w-5 h-5">
+              <PawIcon color="#fff" opacity={1} />
+            </span>
+            Get Started
+          </a>
+        </div>
       </div>
 
-      {/* Bottom strip */}
-      <div
-        className="animate-fade-in fixed bottom-0 left-0 right-0 px-4 py-4 flex justify-center items-center gap-2 bg-cream/60 backdrop-blur-md border-t border-chewy-orange/10 z-20"
-        style={{ animationDelay: "1.3s" }}
-      >
-        <div className="w-[14px] h-[14px] opacity-50">
-          <PawIcon color="var(--chewy-orange)" opacity={1} />
-        </div>
-        <p className="font-nunito text-[0.8rem] font-bold text-text-muted tracking-[0.06em]">
-          a chewy product &nbsp;·&nbsp; good things take time
-        </p>
-        <div className="w-[14px] h-[14px] opacity-50">
-          <PawIcon color="var(--chewy-orange)" opacity={1} />
-        </div>
-      </div>
+      <BottomStrip />
     </div>
-  );
-}
-
-interface PawIconProps {
-  color: string;
-  opacity: number;
-}
-
-function PawIcon({ color, opacity }: PawIconProps) {
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ width: "100%", height: "100%", opacity }}
-    >
-      {/* Toe pads */}
-      <ellipse cx="24" cy="28" rx="11" ry="13" fill={color} />
-      <ellipse cx="47" cy="18" rx="11" ry="13" fill={color} />
-      <ellipse cx="70" cy="22" rx="11" ry="13" fill={color} />
-      <ellipse cx="85" cy="44" rx="10" ry="12" fill={color} />
-      {/* Main pad */}
-      <ellipse cx="52" cy="68" rx="28" ry="24" fill={color} />
-    </svg>
   );
 }
