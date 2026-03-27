@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 const pawPrints = [
   { top: "8%", left: "5%", size: 64, delay: "0s", dur: "7s", rot: "15deg" },
   {
@@ -120,6 +122,16 @@ export default function Home() {
           >
             is coming soon
           </p>
+        </div>
+
+        {/* CTA */}
+        <div
+          className="animate-fade-up mb-6"
+          style={{ animationDelay: "0.95s" }}
+        >
+          <Button size="lg" className="rounded-full px-8 font-nunito font-bold">
+            Join the waitlist
+          </Button>
         </div>
 
         {/* Divider paws */}
