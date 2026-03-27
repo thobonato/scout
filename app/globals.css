@@ -226,12 +226,79 @@
   animation: drift linear infinite;
 }
 
+/* ── Pet Home animations ── */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes celebrate {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.12);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+.animate-celebrate {
+  animation: celebrate 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Gamification animations ── */
+@keyframes float-emoji {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-120px) scale(0.6);
+  }
+}
+
+.animate-float-emoji {
+  animation: float-emoji 1.2s ease-out forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .paw-bg,
   .animate-wag,
   .animate-fade-up,
   .animate-fade-in,
-  .animate-pop-in {
+  .animate-pop-in,
+  .animate-breathe,
+  .animate-celebrate,
+  .animate-slide-up,
+  .animate-float-emoji {
     animation: none;
     opacity: 1;
     transform: none;
