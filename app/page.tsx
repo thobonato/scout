@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { PawIcon } from "@/components/PawIcon";
-import { PageBackground } from "@/components/PageBackground";
-import { BottomStrip } from "@/components/BottomStrip";
+import { PawIcon } from "@/components/PawIcon/PawIcon";
+import { PageBackground } from "@/components/PageBackground/PageBackground";
+import { BottomStrip } from "@/components/BottomStrip/BottomStrip";
 
 export default function Home() {
   return (
@@ -19,9 +19,9 @@ export default function Home() {
         >
           <div className="flex items-center gap-[10px] justify-center">
             <div className="animate-wag w-[42px] h-[42px]">
-              <PawIcon color="var(--scout-primary)" opacity={1} />
+              <PawIcon color="var(--chewy-blue)" opacity={1} />
             </div>
-            <span className="font-fredoka text-[2rem] font-semibold text-scout-primary tracking-[-0.01em] leading-none">
+            <span className="font-fredoka text-[2rem] font-semibold text-chewy-blue tracking-[-0.01em] leading-none">
               chewy
             </span>
           </div>
@@ -32,7 +32,7 @@ export default function Home() {
           className="animate-fade-up mb-3"
           style={{ animationDelay: "0.25s" }}
         >
-          <span className="font-nunito text-[0.85rem] font-bold tracking-[0.18em] uppercase text-scout-secondary bg-scout-secondary/10 border-[1.5px] border-scout-secondary/25 px-[14px] py-[4px] rounded-full">
+          <span className="font-nunito text-[0.85rem] font-bold tracking-[0.18em] uppercase text-chewy-orange bg-chewy-orange/10 border-[1.5px] border-chewy-orange/25 px-[14px] py-[4px] rounded-full">
             introducing
           </span>
         </div>
@@ -45,7 +45,7 @@ export default function Home() {
           >
             Scout
             {/* Orange accent dot */}
-            <span className="inline-block w-[0.18em] h-[0.18em] bg-scout-secondary rounded-full align-top mt-[0.12em] ml-[0.04em]" />
+            <span className="inline-block w-[0.18em] h-[0.18em] bg-chewy-orange rounded-full align-top mt-[0.12em] ml-[0.04em]" />
           </h1>
         </div>
 
@@ -79,7 +79,7 @@ export default function Home() {
         >
           {[0, 1, 2].map((i) => (
             <div key={i} className="w-4 h-4 opacity-35">
-              <PawIcon color="var(--scout-primary)" opacity={1} />
+              <PawIcon color="var(--chewy-blue)" opacity={1} />
             </div>
           ))}
         </div>
@@ -102,7 +102,7 @@ export default function Home() {
         <div className="animate-fade-up" style={{ animationDelay: "1s" }}>
           <a
             href="/create-dog"
-            className="inline-flex items-center gap-2 bg-scout-primary hover:bg-scout-primary-dark text-white font-nunito font-bold px-8 py-4 rounded-full transition-colors text-lg shadow-md hover:shadow-lg"
+            className="inline-flex items-center gap-2 bg-chewy-blue hover:bg-chewy-blue-dark text-white font-nunito font-bold px-8 py-4 rounded-full transition-colors text-lg shadow-md hover:shadow-lg"
           >
             <span className="w-5 h-5">
               <PawIcon color="#fff" opacity={1} />
