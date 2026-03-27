@@ -55,7 +55,7 @@ export function DogProfileForm() {
     };
 
     localStorage.setItem("scout_dog_profile", JSON.stringify(dogProfile));
-    router.push("/dog/temp");
+    router.push("/dog/temp/profile");
   }
 
   const inputClasses =
