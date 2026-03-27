@@ -6,10 +6,10 @@
 
 /* ── Brand design tokens ── */
 :root {
-  --chewy-blue: #00aeef;
-  --chewy-blue-dark: #0092cc;
-  --chewy-orange: #f4791f;
-  --chewy-orange-dark: #d96310;
+  --scout-primary: #1c49c2;
+  --scout-primary-dark: #153a9e;
+  --scout-secondary: #121212;
+  --scout-secondary-dark: #2a2a2a;
   --cream: #fff8f0;
   --warm-white: #fffcf8;
   --text-dark: #1a1a2e;
@@ -56,10 +56,10 @@
   Font variables (--font-fredoka, --font-nunito) are set at runtime by Next.js.
 */
 @theme inline {
-  --color-chewy-blue: var(--chewy-blue);
-  --color-chewy-blue-dark: var(--chewy-blue-dark);
-  --color-chewy-orange: var(--chewy-orange);
-  --color-chewy-orange-dark: var(--chewy-orange-dark);
+  --color-scout-primary: var(--scout-primary);
+  --color-scout-primary-dark: var(--scout-primary-dark);
+  --color-scout-secondary: var(--scout-secondary);
+  --color-scout-secondary-dark: var(--scout-secondary-dark);
   --color-cream: var(--cream);
   --color-warm-white: var(--warm-white);
   --color-text-dark: var(--text-dark);
