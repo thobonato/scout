@@ -3,24 +3,13 @@
 import { useState } from "react";
 import { LandingPage } from "./components/LandingPage/LandingPage";
 import { OwnerHome } from "./components/OwnerHome/OwnerHome";
+import { loadDogProfile } from "@/lib/dog-profile";
 import type { DogProfile } from "@/app/create-dog/types";
 
-function loadDogProfile(): DogProfile | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const stored = localStorage.getItem("scout_dog_profile");
-
-  if (!stored) {
-    return null;
-  }
-
-  return JSON.parse(stored) as DogProfile;
-}
-
 export default function Home() {
-  const [dog] = useState<DogProfile | null>(loadDogProfile);
+  const [dog] = useState<DogProfile | null>(() =>
+    typeof window !== "undefined" ? loadDogProfile() : null,
+  );
 
   if (!dog) {
     return <LandingPage />;

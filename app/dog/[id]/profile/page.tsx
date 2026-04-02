@@ -3,30 +3,24 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Share2 } from "lucide-react";
 import { PawIcon } from "@/components/PawIcon/PawIcon";
 import { PageBackground } from "@/components/PageBackground/PageBackground";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { DogCard } from "../components/DogCard/DogCard";
+import { ShareCardModal } from "../components/ShareCardModal/ShareCardModal";
+import { HealthInsights } from "./components/HealthInsights";
+import { loadDogProfile } from "@/lib/dog-profile";
 import type { DogProfile } from "@/app/create-dog/types";
 
-function loadDogProfile(): DogProfile | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const stored = localStorage.getItem("scout_dog_profile");
-
-  if (!stored) {
-    return null;
-  }
-
-  return JSON.parse(stored) as DogProfile;
-}
 
 export default function DogProfilePage() {
   const params = useParams();
   const dogId = params.id as string;
-  const [dog] = useState<DogProfile | null>(loadDogProfile);
+  const [dog] = useState<DogProfile | null>(() =>
+    typeof window !== "undefined" ? loadDogProfile() : null,
+  );
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   if (!dog) {
     return (
@@ -95,11 +89,27 @@ export default function DogProfilePage() {
           <DogCard dog={dog} />
         </div>
 
-        {/* Go Home button */}
+        {/* Health Insights */}
         <div
-          className="animate-fade-up w-full max-w-md"
+          className="animate-fade-up w-full max-w-md mb-4"
+          style={{ animationDelay: "0.45s" }}
+        >
+          <HealthInsights dog={dog} />
+        </div>
+
+        {/* Action buttons */}
+        <div
+          className="animate-fade-up w-full max-w-md flex flex-col gap-3"
           style={{ animationDelay: "0.5s" }}
         >
+          <button
+            onClick={() => setIsShareOpen(true)}
+            className="w-full flex items-center justify-center gap-3 bg-chewy-orange hover:bg-chewy-orange-dark text-white font-nunito font-bold px-8 py-5 rounded-full transition-colors text-lg shadow-md hover:shadow-lg"
+          >
+            <Share2 className="w-5 h-5" />
+            Share Card
+          </button>
+
           <Link
             href={`/dog/${dogId}`}
             className="w-full flex items-center justify-center gap-3 bg-chewy-blue hover:bg-chewy-blue-dark text-white font-nunito font-bold px-8 py-5 rounded-full transition-colors text-lg shadow-md hover:shadow-lg"
@@ -111,6 +121,12 @@ export default function DogProfilePage() {
           </Link>
         </div>
       </div>
+
+      <ShareCardModal
+        dog={dog}
+        isOpen={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+      />
 
       <BottomNav />
     </div>
