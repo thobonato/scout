@@ -92,6 +92,48 @@ If installed, upgrade:
 npm install -g pnpm@latest
 ```
 
+### 5. Supabase CLI
+
+The Supabase CLI is used for managing database migrations and local development.
+
+**Check if installed:**
+
+```bash
+supabase --version
+```
+
+If not installed:
+
+```bash
+brew install supabase/tap/supabase
+```
+
+If installed, upgrade:
+
+```bash
+brew upgrade supabase
+```
+
+### 6. Link to Supabase Project
+
+**⚠️ One-Time Setup (Project Maintainer Only)**
+
+The `supabase/` directory is already version-controlled in git. **Do not run
+`supabase init` or `supabase login` unless you are setting up a brand new
+project.** These should only be done once per project.
+
+As a developer, you only need to link your local CLI to the cloud project:
+
+```bash
+supabase link --project-ref your-project-ref
+```
+
+> Replace `your-project-ref` with the actual project reference from your
+> Supabase dashboard URL: `https://app.supabase.com/project/{project-ref}`
+
+For ongoing database work (creating migrations, pulling schema changes, etc.),
+see [docs/database/MIGRATIONS.md](../../database/MIGRATIONS.md).
+
 ## Getting Secrets
 
 We use Doppler to manage environment variables. You need to do this before the
