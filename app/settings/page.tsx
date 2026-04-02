@@ -62,7 +62,7 @@ export default function SettingsPage() {
   async function handleSendInvite(payload: SitterInvitePayload) {
     // TODO: replace with fetch("/api/sitters/invite", { method: "POST", body: JSON.stringify(payload) })
     await new Promise((res) => setTimeout(res, 1000));
-    console.log("Invite sent:", payload);
+    console.warn("Invite sent:", payload);
   }
 
   return (

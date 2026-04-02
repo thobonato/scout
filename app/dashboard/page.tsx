@@ -11,26 +11,15 @@ import { SitterLink } from "./components/SitterLink/SitterLink";
 import { SitterActivityFeed } from "./components/SitterActivityFeed/SitterActivityFeed";
 import { getAllLogs } from "@/lib/actions";
 import { loadSitterSessions } from "@/lib/sitter-sessions";
+import { loadDogProfile } from "@/lib/dog-profile";
 import type { DogProfile } from "@/app/create-dog/types";
 import type { ActionLog } from "@/app/dog/[id]/home/types";
 import type { SitterSession } from "./types";
 
-function loadDogProfile(): DogProfile | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const stored = localStorage.getItem("scout_dog_profile");
-
-  if (!stored) {
-    return null;
-  }
-
-  return JSON.parse(stored) as DogProfile;
-}
-
 export default function DashboardPage() {
-  const [dog] = useState<DogProfile | null>(loadDogProfile);
+  const [dog] = useState<DogProfile | null>(() =>
+    typeof window !== "undefined" ? loadDogProfile() : null,
+  );
   const [logs] = useState<ActionLog[]>(() =>
     typeof window !== "undefined" ? getAllLogs() : [],
   );
