@@ -66,7 +66,67 @@ If installed, upgrade:
 npm install -g pnpm@latest
 ```
 
-### 4. Git
+### 5. Supabase CLI
+
+The Supabase CLI is used for managing database migrations and local development.
+
+**Check if installed:**
+
+```bash
+supabase --version
+```
+
+If not installed:
+
+**Option A: Using Scoop (Recommended)**
+
+If you have [Scoop](https://scoop.sh/) installed:
+
+```powershell
+scoop install supabase
+```
+
+**Option B: Using Chocolatey**
+
+If you have [Chocolatey](https://chocolatey.org/) installed:
+
+```powershell
+choco install supabase
+```
+
+**Option C: Manual Installation**
+
+Download the latest Windows binary from
+[supabase/cli releases](https://github.com/supabase/cli/releases), extract it,
+and add it to your PATH.
+
+**Verify installation:**
+
+```bash
+supabase --version
+```
+
+### 5. Link to Supabase Project
+
+**⚠️ One-Time Setup (Project Maintainer Only)**
+
+The `supabase/` directory is already version-controlled in git. **Do not run
+`supabase init` or `supabase login` unless you are setting up a brand new
+project.** These should only be done once per project.
+
+As a developer, you only need to link your local CLI to the cloud project:
+
+```bash
+supabase link --project-ref your-project-ref
+```
+
+> Replace `your-project-ref` with the actual project reference from your
+> Supabase dashboard URL: `https://app.supabase.com/project/{project-ref}`
+
+For ongoing database work (creating migrations, pulling schema changes, etc.),
+see [docs/database/MIGRATIONS.md](../../database/MIGRATIONS.md).
+
+### 6. Git
 
 Download and install Git from [git-scm.com](https://git-scm.com/download/win).
 
