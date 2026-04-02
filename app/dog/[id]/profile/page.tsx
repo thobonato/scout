@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomNav } from "@/components/BottomNav/BottomNav";
-import { DogCard } from "../components/DogCard/DogCard";
-import type { DogProfile } from "@/app/create-dog/types";
+import { BottomNav } from '@/components/BottomNav/BottomNav';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import type { DogProfile } from '@/types/views';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useState } from 'react';
+import { DogCard } from '../components/DogCard/DogCard';
 
 function loadDogProfile(): DogProfile | null {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return null;
   }
 
-  const stored = localStorage.getItem("scout_dog_profile");
+  const stored = localStorage.getItem('scout_dog_profile');
 
   if (!stored) {
     return null;
@@ -67,7 +67,7 @@ export default function DogProfilePage() {
         {/* Back link */}
         <div
           className="animate-fade-up w-full max-w-md mb-8"
-          style={{ animationDelay: "0.1s" }}
+          style={{ animationDelay: '0.1s' }}
         >
           <Link
             href={`/dog/${dogId}`}
@@ -80,7 +80,7 @@ export default function DogProfilePage() {
         {/* Success badge */}
         <div
           className="animate-fade-up mb-6"
-          style={{ animationDelay: "0.2s" }}
+          style={{ animationDelay: '0.2s' }}
         >
           <span className="font-nunito text-[0.85rem] font-bold tracking-[0.18em] uppercase text-chewy-orange bg-chewy-orange/10 border-[1.5px] border-chewy-orange/25 px-[14px] py-[4px] rounded-full">
             Profile Created
@@ -90,7 +90,7 @@ export default function DogProfilePage() {
         {/* Dog card */}
         <div
           className="animate-pop-in w-full max-w-md mb-8"
-          style={{ animationDelay: "0.35s" }}
+          style={{ animationDelay: '0.35s' }}
         >
           <DogCard dog={dog} />
         </div>
@@ -98,7 +98,7 @@ export default function DogProfilePage() {
         {/* Go Home button */}
         <div
           className="animate-fade-up w-full max-w-md"
-          style={{ animationDelay: "0.5s" }}
+          style={{ animationDelay: '0.5s' }}
         >
           <Link
             href={`/dog/${dogId}`}

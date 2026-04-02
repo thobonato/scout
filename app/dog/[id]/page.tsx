@@ -1,44 +1,49 @@
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomNav } from "@/components/BottomNav/BottomNav";
-import { AvatarDisplay } from "./home/components/AvatarDisplay/AvatarDisplay";
-import { MoodBadge } from "./home/components/MoodBadge/MoodBadge";
-import { FloatingEmoji } from "./home/components/FloatingEmoji/FloatingEmoji";
-import { ActionCTAs } from "./home/components/ActionCTAs/ActionCTAs";
-import { ItemModal } from "./home/components/ItemModal/ItemModal";
-import { XPBar } from "./home/components/XPBar/XPBar";
-import { StreakBadge } from "./home/components/StreakBadge/StreakBadge";
-import { FulfillmentMeters } from "./home/components/FulfillmentMeters/FulfillmentMeters";
-import { ActivityLog } from "./home/components/ActivityLog/ActivityLog";
-import { AchievementRow } from "./home/components/AchievementRow/AchievementRow";
-import { getItemsByCategory, getTodayLogs, logAction } from "@/lib/actions";
-import { calculateFulfillment } from "@/lib/fulfillment";
-import { deriveMood } from "@/lib/mood";
-import { loadXPState, awardXP } from "@/lib/xp";
-import { loadStreakState, checkAndUpdateStreak } from "@/lib/streak";
-import { loadAchievements, checkAchievements } from "@/lib/achievements";
-import type { DogProfile } from "@/app/create-dog/types";
+import { BottomNav } from '@/components/BottomNav/BottomNav';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import { getItemsByCategory, getTodayLogs, logAction } from '@/lib/actions';
+import {
+  awardXP,
+  calculateFulfillment,
+  checkAchievements,
+  checkAndUpdateStreak,
+  deriveMood,
+  loadAchievements,
+  loadStreakState,
+  loadXPState,
+} from '@/lib/gamification';
 import type {
+  Achievement,
   ActionCategory,
   ActionLog,
   CareItem,
+  DogProfile,
   FulfillmentState,
-  XPState,
   StreakState,
-  Achievement,
-} from "./home/types";
+  XPState,
+} from '@/types/views';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import { AchievementRow } from './home/components/AchievementRow/AchievementRow';
+import { ActionCTAs } from './home/components/ActionCTAs/ActionCTAs';
+import { ActivityLog } from './home/components/ActivityLog/ActivityLog';
+import { AvatarDisplay } from './home/components/AvatarDisplay/AvatarDisplay';
+import { FloatingEmoji } from './home/components/FloatingEmoji/FloatingEmoji';
+import { FulfillmentMeters } from './home/components/FulfillmentMeters/FulfillmentMeters';
+import { ItemModal } from './home/components/ItemModal/ItemModal';
+import { MoodBadge } from './home/components/MoodBadge/MoodBadge';
+import { StreakBadge } from './home/components/StreakBadge/StreakBadge';
+import { XPBar } from './home/components/XPBar/XPBar';
 
 function loadDogProfile(): DogProfile | null {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return null;
   }
 
-  const stored = localStorage.getItem("scout_dog_profile");
+  const stored = localStorage.getItem('scout_dog_profile');
 
   if (!stored) {
     return null;
@@ -48,7 +53,7 @@ function loadDogProfile(): DogProfile | null {
 }
 
 function deriveLastActionTimes(
-  logs: ActionLog[],
+  logs: ActionLog[]
 ): Record<ActionCategory, string | null> {
   const result: Record<ActionCategory, string | null> = {
     feed: null,
@@ -71,20 +76,20 @@ export default function PetHomePage() {
 
   const [dog] = useState<DogProfile | null>(loadDogProfile);
   const [logs, setLogs] = useState<ActionLog[]>(() =>
-    typeof window !== "undefined" ? getTodayLogs() : [],
+    typeof window !== 'undefined' ? getTodayLogs() : []
   );
   const [fulfillment, setFulfillment] = useState<FulfillmentState>(() =>
-    calculateFulfillment(typeof window !== "undefined" ? getTodayLogs() : []),
+    calculateFulfillment(typeof window !== 'undefined' ? getTodayLogs() : [])
   );
   const [xp, setXP] = useState<XPState>(() => loadXPState());
   const [streak, setStreak] = useState<StreakState>(() => loadStreakState());
   const [achievements, setAchievements] = useState<Achievement[]>(() =>
-    loadAchievements(),
+    loadAchievements()
   );
   const [activeCategory, setActiveCategory] = useState<ActionCategory | null>(
-    null,
+    null
   );
-  const [celebrationClass, setCelebrationClass] = useState("");
+  const [celebrationClass, setCelebrationClass] = useState('');
   const [emojiTrigger, setEmojiTrigger] = useState(0);
   const [lastCategory, setLastCategory] = useState<ActionCategory | null>(null);
 
@@ -128,10 +133,10 @@ export default function PetHomePage() {
       setEmojiTrigger((prev) => prev + 1);
 
       // Avatar celebration
-      setCelebrationClass("animate-celebrate");
-      setTimeout(() => setCelebrationClass(""), 600);
+      setCelebrationClass('animate-celebrate');
+      setTimeout(() => setCelebrationClass(''), 600);
     },
-    [logs],
+    [logs]
   );
 
   const handleCloseModal = useCallback(() => {
@@ -211,7 +216,7 @@ export default function PetHomePage() {
         <StreakBadge streak={streak} />
 
         {/* CTAs */}
-        <div className="animate-fade-up" style={{ animationDelay: "0.2s" }}>
+        <div className="animate-fade-up" style={{ animationDelay: '0.2s' }}>
           <ActionCTAs
             onAction={handleAction}
             lastActionTimes={lastActionTimes}
@@ -221,7 +226,7 @@ export default function PetHomePage() {
         {/* XP Bar */}
         <div
           className="animate-fade-up w-full flex justify-center"
-          style={{ animationDelay: "0.3s" }}
+          style={{ animationDelay: '0.3s' }}
         >
           <XPBar xp={xp} />
         </div>
@@ -229,7 +234,7 @@ export default function PetHomePage() {
         {/* Fulfillment meters */}
         <div
           className="animate-fade-up w-full flex justify-center"
-          style={{ animationDelay: "0.4s" }}
+          style={{ animationDelay: '0.4s' }}
         >
           <FulfillmentMeters fulfillment={fulfillment} />
         </div>
@@ -237,7 +242,7 @@ export default function PetHomePage() {
         {/* Activity log */}
         <div
           className="animate-fade-up w-full flex justify-center"
-          style={{ animationDelay: "0.5s" }}
+          style={{ animationDelay: '0.5s' }}
         >
           <ActivityLog logs={logs} />
         </div>
@@ -245,7 +250,7 @@ export default function PetHomePage() {
         {/* Achievements */}
         <div
           className="animate-fade-up w-full flex justify-center"
-          style={{ animationDelay: "0.6s" }}
+          style={{ animationDelay: '0.6s' }}
         >
           <AchievementRow achievements={achievements} />
         </div>

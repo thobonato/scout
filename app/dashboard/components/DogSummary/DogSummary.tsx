@@ -1,7 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import type { DogProfile } from "@/app/create-dog/types";
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import type { DogProfile } from '@/types/views';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface DogSummaryProps {
   dog: DogProfile;
@@ -40,8 +40,8 @@ export function DogSummary({ dog }: DogSummaryProps) {
           <p className="font-nunito text-sm text-text-mid">
             {dog.breed}
             {dog.age
-              ? ` · ${dog.age} ${Number(dog.age) === 1 ? "yr" : "yrs"}`
-              : ""}
+              ? ` · ${dog.age} ${Number(dog.age) === 1 ? 'yr' : 'yrs'}`
+              : ''}
           </p>
         </div>
 

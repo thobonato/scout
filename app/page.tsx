@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { LandingPage } from "./components/LandingPage/LandingPage";
-import { OwnerHome } from "./components/OwnerHome/OwnerHome";
-import type { DogProfile } from "@/app/create-dog/types";
+import type { DogProfile } from '@/types/views';
+import { useState } from 'react';
+import { LandingPage } from './components/LandingPage/LandingPage';
+import { OwnerHome } from './components/OwnerHome/OwnerHome';
 
 function loadDogProfile(): DogProfile | null {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return null;
   }
 
-  const stored = localStorage.getItem("scout_dog_profile");
+  const stored = localStorage.getItem('scout_dog_profile');
 
   if (!stored) {
     return null;

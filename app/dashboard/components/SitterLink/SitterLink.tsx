@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Link2, Copy, Check, Trash2, Plus, Calendar } from "lucide-react";
 import {
-  loadSitterSessions,
   createSitterSession,
+  loadSitterSessions,
   revokeSitterSession,
-} from "@/lib/sitter-sessions";
-import type { SitterSession } from "../../types";
+} from '@/lib/sitters';
+import type { SitterSession } from '@/types/views';
+import { Calendar, Check, Copy, Link2, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface SitterLinkProps {
   dogId: string;
@@ -17,37 +17,37 @@ function formatDateRange(start: string, end: string): string {
   const startDate = new Date(`${start}T00:00:00`);
   const endDate = new Date(`${end}T00:00:00`);
 
-  const opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
+  const opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
 
   if (start === end) {
-    return startDate.toLocaleDateString("en-US", opts);
+    return startDate.toLocaleDateString('en-US', opts);
   }
 
-  return `${startDate.toLocaleDateString("en-US", opts)} – ${endDate.toLocaleDateString("en-US", opts)}`;
+  return `${startDate.toLocaleDateString('en-US', opts)} – ${endDate.toLocaleDateString('en-US', opts)}`;
 }
 
 export function SitterLink({ dogId }: SitterLinkProps) {
   const [sessions, setSessions] = useState<SitterSession[]>(() =>
     loadSitterSessions()
       .filter((s) => s.dogId === dogId)
-      .reverse(),
+      .reverse()
   );
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
   // Form state
-  const [label, setLabel] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [dropOffTime, setDropOffTime] = useState("");
-  const [pickUpTime, setPickUpTime] = useState("");
+  const [label, setLabel] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [dropOffTime, setDropOffTime] = useState('');
+  const [pickUpTime, setPickUpTime] = useState('');
 
   function resetForm(): void {
-    setLabel("");
-    setStartDate("");
-    setEndDate("");
-    setDropOffTime("");
-    setPickUpTime("");
+    setLabel('');
+    setStartDate('');
+    setEndDate('');
+    setDropOffTime('');
+    setPickUpTime('');
     setIsCreating(false);
   }
 
@@ -82,7 +82,7 @@ export function SitterLink({ dogId }: SitterLinkProps) {
   }
 
   const inputClasses =
-    "w-full px-3 py-2.5 rounded-xl border border-black/10 bg-cream font-nunito text-sm text-text-dark placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-chewy-blue/30 focus:border-chewy-blue/40 transition-all";
+    'w-full px-3 py-2.5 rounded-xl border border-black/10 bg-cream font-nunito text-sm text-text-dark placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-chewy-blue/30 focus:border-chewy-blue/40 transition-all';
 
   return (
     <div className="w-full bg-warm-white rounded-2xl p-6 shadow-sm border border-black/5">
@@ -208,7 +208,7 @@ export function SitterLink({ dogId }: SitterLinkProps) {
                         {formatDateRange(session.startDate, session.endDate)}
                         {session.dropOffTime && session.pickUpTime
                           ? ` · ${session.pickUpTime} – ${session.dropOffTime}`
-                          : ""}
+                          : ''}
                       </span>
                     </div>
                   </div>

@@ -1,26 +1,24 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomNav } from "@/components/BottomNav/BottomNav";
-import { DogSummary } from "./components/DogSummary/DogSummary";
-import { RoutineOverview } from "./components/RoutineOverview/RoutineOverview";
-import { SitterLink } from "./components/SitterLink/SitterLink";
-import { SitterActivityFeed } from "./components/SitterActivityFeed/SitterActivityFeed";
-import { getAllLogs } from "@/lib/actions";
-import { loadSitterSessions } from "@/lib/sitter-sessions";
-import type { DogProfile } from "@/app/create-dog/types";
-import type { ActionLog } from "@/app/dog/[id]/home/types";
-import type { SitterSession } from "./types";
+import { BottomNav } from '@/components/BottomNav/BottomNav';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import { getAllLogs } from '@/lib/actions';
+import { loadSitterSessions } from '@/lib/sitters';
+import type { ActionLog, DogProfile, SitterSession } from '@/types/views';
+import Link from 'next/link';
+import { useState } from 'react';
+import { DogSummary } from './components/DogSummary/DogSummary';
+import { RoutineOverview } from './components/RoutineOverview/RoutineOverview';
+import { SitterActivityFeed } from './components/SitterActivityFeed/SitterActivityFeed';
+import { SitterLink } from './components/SitterLink/SitterLink';
 
 function loadDogProfile(): DogProfile | null {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return null;
   }
 
-  const stored = localStorage.getItem("scout_dog_profile");
+  const stored = localStorage.getItem('scout_dog_profile');
 
   if (!stored) {
     return null;
@@ -32,14 +30,14 @@ function loadDogProfile(): DogProfile | null {
 export default function DashboardPage() {
   const [dog] = useState<DogProfile | null>(loadDogProfile);
   const [logs] = useState<ActionLog[]>(() =>
-    typeof window !== "undefined" ? getAllLogs() : [],
+    typeof window !== 'undefined' ? getAllLogs() : []
   );
   const [sessions] = useState<SitterSession[]>(() =>
-    typeof window !== "undefined"
+    typeof window !== 'undefined'
       ? loadSitterSessions()
-          .filter((s) => s.dogId === "temp")
+          .filter((s) => s.dogId === 'temp')
           .reverse()
-      : [],
+      : []
   );
 
   if (!dog) {
@@ -95,7 +93,7 @@ export default function DashboardPage() {
         {/* Dog summary */}
         <div
           className="animate-fade-up w-full"
-          style={{ animationDelay: "0.1s" }}
+          style={{ animationDelay: '0.1s' }}
         >
           <DogSummary dog={dog} />
         </div>
@@ -103,7 +101,7 @@ export default function DashboardPage() {
         {/* Routine overview */}
         <div
           className="animate-fade-up w-full"
-          style={{ animationDelay: "0.2s" }}
+          style={{ animationDelay: '0.2s' }}
         >
           <RoutineOverview />
         </div>
@@ -111,7 +109,7 @@ export default function DashboardPage() {
         {/* Sitter links */}
         <div
           className="animate-fade-up w-full"
-          style={{ animationDelay: "0.3s" }}
+          style={{ animationDelay: '0.3s' }}
         >
           <SitterLink dogId="temp" />
         </div>
@@ -119,7 +117,7 @@ export default function DashboardPage() {
         {/* Sitter activity feed */}
         <div
           className="animate-fade-up w-full"
-          style={{ animationDelay: "0.4s" }}
+          style={{ animationDelay: '0.4s' }}
         >
           <SitterActivityFeed logs={logs} sessions={sessions} />
         </div>

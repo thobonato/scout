@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
-import type { TrackerCategory, TrackerTask } from "../types";
+import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from '@/lib/utils';
+import type { TrackerCategory, TrackerTask } from '@/types/views';
 
 interface TrackerTaskItemProps {
   task: TrackerTask;
@@ -10,15 +10,15 @@ interface TrackerTaskItemProps {
 }
 
 const CATEGORY_BG: Record<TrackerCategory, string> = {
-  food: "bg-orange-50 border-orange-100",
-  exercise: "bg-green-50 border-green-100",
-  medicine: "bg-blue-50 border-blue-100",
+  food: 'bg-orange-50 border-orange-100',
+  exercise: 'bg-green-50 border-green-100',
+  medicine: 'bg-blue-50 border-blue-100',
 };
 
 const CATEGORY_TIME_COLOR: Record<TrackerCategory, string> = {
-  food: "text-chewy-orange",
-  exercise: "text-green-600",
-  medicine: "text-chewy-blue",
+  food: 'text-chewy-orange',
+  exercise: 'text-green-600',
+  medicine: 'text-chewy-blue',
 };
 
 export function TrackerTaskItem({ task, onToggle }: TrackerTaskItemProps) {
@@ -27,9 +27,9 @@ export function TrackerTaskItem({ task, onToggle }: TrackerTaskItemProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-3 rounded-2xl border px-4 py-3 transition-all duration-200",
+        'flex items-center gap-3 rounded-2xl border px-4 py-3 transition-all duration-200',
         CATEGORY_BG[task.category],
-        task.isCompleted && "opacity-50",
+        task.isCompleted && 'opacity-50'
       )}
     >
       <Checkbox
@@ -42,8 +42,8 @@ export function TrackerTaskItem({ task, onToggle }: TrackerTaskItemProps) {
       <label
         htmlFor={checkboxId}
         className={cn(
-          "flex-1 cursor-pointer font-nunito text-sm font-medium text-chewy-dark transition-all duration-200 select-none",
-          task.isCompleted && "line-through text-gray-400",
+          'flex-1 cursor-pointer font-nunito text-sm font-medium text-chewy-dark transition-all duration-200 select-none',
+          task.isCompleted && 'line-through text-gray-400'
         )}
       >
         {task.label}
@@ -57,8 +57,8 @@ export function TrackerTaskItem({ task, onToggle }: TrackerTaskItemProps) {
       {task.time && (
         <span
           className={cn(
-            "font-nunito text-xs font-semibold tabular-nums",
-            CATEGORY_TIME_COLOR[task.category],
+            'font-nunito text-xs font-semibold tabular-nums',
+            CATEGORY_TIME_COLOR[task.category]
           )}
         >
           {task.time}

@@ -1,6 +1,6 @@
-import type { ActionCategory, XPState } from "@/app/dog/[id]/home/types";
+import type { ActionCategory, XPState } from '@/types/views';
 
-const STORAGE_KEY = "scout_xp_state";
+const STORAGE_KEY = 'scout_xp_state';
 
 const XP_PER_ACTION: Record<ActionCategory, number> = {
   feed: 10,
@@ -13,7 +13,7 @@ const XP_PER_LEVEL = 50;
 
 export function getXPForAction(
   category: ActionCategory,
-  hasPhoto: boolean,
+  hasPhoto: boolean
 ): number {
   const base = XP_PER_ACTION[category];
   return hasPhoto ? base + PHOTO_BONUS : base;
@@ -43,7 +43,7 @@ export function loadXPState(): XPState {
 
   const data = JSON.parse(stored) as { totalXP: number };
   const { level, xpInCurrentLevel, xpToNextLevel } = calculateLevel(
-    data.totalXP,
+    data.totalXP
   );
 
   return { totalXP: data.totalXP, level, xpInCurrentLevel, xpToNextLevel };
@@ -56,7 +56,7 @@ export function awardXP(category: ActionCategory, hasPhoto: boolean): XPState {
 
   globalThis.localStorage?.setItem(
     STORAGE_KEY,
-    JSON.stringify({ totalXP: newTotal }),
+    JSON.stringify({ totalXP: newTotal })
   );
 
   const { level, xpInCurrentLevel, xpToNextLevel } = calculateLevel(newTotal);

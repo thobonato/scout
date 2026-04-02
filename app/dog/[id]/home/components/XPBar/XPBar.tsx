@@ -1,4 +1,4 @@
-import type { XPState } from "../../types";
+import type { XPState } from '@/types/views';
 
 interface XPBarProps {
   xp: XPState;

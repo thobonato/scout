@@ -1,6 +1,6 @@
-import Image from "next/image";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import type { DogProfile } from "@/app/create-dog/types";
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import type { DogProfile } from '@/types/views';
+import Image from 'next/image';
 
 interface DogCardProps {
   dog: DogProfile;
@@ -70,7 +70,7 @@ export function DogCard({ dog }: DogCardProps) {
             label="Age"
             value={
               dog.age
-                ? `${dog.age} ${Number(dog.age) === 1 ? "yr" : "yrs"}`
+                ? `${dog.age} ${Number(dog.age) === 1 ? 'yr' : 'yrs'}`
                 : undefined
             }
           />
@@ -143,17 +143,17 @@ function formatSize(size: string | undefined): string | undefined {
   }
 
   const labels: Record<string, string> = {
-    small: "Small",
-    medium: "Medium",
-    large: "Large",
-    "extra-large": "XL",
+    small: 'Small',
+    medium: 'Medium',
+    large: 'Large',
+    'extra-large': 'XL',
   };
 
   return labels[size] || size;
 }
 
 function formatGender(gender: string | undefined): string | undefined {
-  if (!gender || gender === "unknown") {
+  if (!gender || gender === 'unknown') {
     return undefined;
   }
 

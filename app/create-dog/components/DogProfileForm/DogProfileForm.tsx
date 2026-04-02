@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { PhotoUpload } from "../PhotoUpload/PhotoUpload";
-import { DogBasicFields } from "../DogBasicFields/DogBasicFields";
-import { DogDetailFields } from "../DogDetailFields/DogDetailFields";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import type { DogProfile, DogGender, DogSize } from "../../types";
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import type { DogGender, DogProfile, DogSize } from '@/types/views';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { DogBasicFields } from '../DogBasicFields/DogBasicFields';
+import { DogDetailFields } from '../DogDetailFields/DogDetailFields';
+import { PhotoUpload } from '../PhotoUpload/PhotoUpload';
 
 export function DogProfileForm() {
   const router = useRouter();
 
-  const [name, setName] = useState("");
-  const [breed, setBreed] = useState("");
-  const [age, setAge] = useState("");
-  const [weight, setWeight] = useState("");
-  const [gender, setGender] = useState<DogGender>("unknown");
-  const [size, setSize] = useState<DogSize>("medium");
-  const [coatColor, setCoatColor] = useState("");
-  const [personality, setPersonality] = useState("");
-  const [medicalNotes, setMedicalNotes] = useState("");
+  const [name, setName] = useState('');
+  const [breed, setBreed] = useState('');
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [gender, setGender] = useState<DogGender>('unknown');
+  const [size, setSize] = useState<DogSize>('medium');
+  const [coatColor, setCoatColor] = useState('');
+  const [personality, setPersonality] = useState('');
+  const [medicalNotes, setMedicalNotes] = useState('');
   const [isSpayedNeutered, setIsSpayedNeutered] = useState(false);
-  const [photoUrl, setPhotoUrl] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [error, setError] = useState("");
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [error, setError] = useState('');
 
   function handleSubmit(event: React.FormEvent): void {
     event.preventDefault();
-    setError("");
+    setError('');
 
     if (!name.trim()) {
       setError("Please enter your dog's name");
@@ -54,12 +54,12 @@ export function DogProfileForm() {
       avatarUrl,
     };
 
-    localStorage.setItem("scout_dog_profile", JSON.stringify(dogProfile));
-    router.push("/dog/temp/profile");
+    localStorage.setItem('scout_dog_profile', JSON.stringify(dogProfile));
+    router.push('/dog/temp/profile');
   }
 
   const inputClasses =
-    "w-full px-4 py-3 rounded-xl border border-black/10 bg-warm-white font-nunito text-text-dark placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-chewy-blue/30 focus:border-chewy-blue/40 transition-all";
+    'w-full px-4 py-3 rounded-xl border border-black/10 bg-warm-white font-nunito text-text-dark placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-chewy-blue/30 focus:border-chewy-blue/40 transition-all';
 
   return (
     <form

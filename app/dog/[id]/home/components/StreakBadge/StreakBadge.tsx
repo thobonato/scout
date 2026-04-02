@@ -1,4 +1,4 @@
-import type { StreakState } from "../../types";
+import type { StreakState } from '@/types/views';
 
 interface StreakBadgeProps {
   streak: StreakState;

@@ -1,6 +1,6 @@
-import type { SitterSession } from "@/app/dashboard/types";
+import type { SitterSession } from '@/types/views';
 
-const STORAGE_KEY = "scout_sitter_sessions";
+const STORAGE_KEY = 'scout_sitter_sessions';
 
 export function loadSitterSessions(): SitterSession[] {
   const stored = globalThis.localStorage?.getItem(STORAGE_KEY);

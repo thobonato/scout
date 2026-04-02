@@ -1,4 +1,6 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { getOrGenerateRecommendations } from '@/lib/healthcare/recommendations';
+import { getPet } from '@/lib/queries/pets';
+import { type NextRequest, NextResponse } from 'next/server';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -24,14 +26,38 @@ interface GetRecommendationsResponse {
 // GET /api/recommendations?petId=...
 // ---------------------------------------------------------------------------
 export async function GET(
-  request: NextRequest,
+  request: NextRequest
 ): Promise<NextResponse<GetRecommendationsResponse>> {
-  const petId = request.nextUrl.searchParams.get("petId");
+  const petId = request.nextUrl.searchParams.get('petId');
 
   if (!petId) {
-    return NextResponse.json({ error: "Missing petId" }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Missing petId query parameter' },
+      { status: 400 }
+    );
   }
 
-  // TODO: replace with lib/recommendations.ts call, e.g. getAIRecommendations(petId)
-  return NextResponse.json({ error: "Not implemented" }, { status: 501 });
+  // Get pet details for context
+  const pet = await getPet(petId);
+
+  if (!pet) {
+    return NextResponse.json({ error: 'Pet not found' }, { status: 404 });
+  }
+
+  // Get or generate recommendations from LLM
+  const recommendations = await getOrGenerateRecommendations(petId, pet);
+
+  // Transform to API response format
+  const data: RecommendedProduct[] = recommendations.map((rec, index) => ({
+    id: `rec-${petId}-${index}`,
+    name: rec.name,
+    brand: rec.brand,
+    imageUrl: '', // TODO: Can add Chewy image scraping or placeholder
+    chewyUrl: rec.chewyUrl,
+    price: parseFloat(rec.price.replace(/[^0-9.]/g, '')),
+    confidenceScore: rec.confidenceScore,
+    reasonSnippet: rec.reasonSnippet,
+  }));
+
+  return NextResponse.json({ data });
 }

@@ -1,49 +1,63 @@
-import type {
-  ActionCategory,
-  ActionLog,
-  CareItem,
-} from "@/app/dog/[id]/home/types";
+/**
+ * Action/Activity utility functions
+ *
+ * Note: localStorage operations have been moved to hooks/useActionLog.ts
+ * This module contains pure logic and constants.
+ *
+ * DEPRECATED: Use hooks/useActionLog for getAllLogs, getTodayLogs, logAction
+ * This module is kept for backwards compatibility and constants only.
+ */
 
-const STORAGE_KEY = "scout_action_log";
+import type { ActionCategory, ActionLog, CareItem } from '@/types/views';
 
 // Default items per category
-const DEFAULT_ITEMS: CareItem[] = [
-  { id: "feed-kibble", category: "feed", name: "Kibble", icon: "🍖" },
-  { id: "feed-wet", category: "feed", name: "Wet Food", icon: "🥫" },
-  { id: "feed-treat", category: "feed", name: "Treat", icon: "🦴" },
-  { id: "feed-custom", category: "feed", name: "Custom", icon: "🍽️" },
-  { id: "play-fetch", category: "play", name: "Fetch", icon: "🎾" },
-  { id: "play-tug", category: "play", name: "Tug", icon: "🪢" },
-  { id: "play-walk", category: "play", name: "Walk", icon: "🚶" },
-  { id: "play-free", category: "play", name: "Free Play", icon: "🐕" },
-  { id: "med-morning", category: "medicine", name: "Morning Meds", icon: "💊" },
-  { id: "med-evening", category: "medicine", name: "Evening Meds", icon: "💊" },
+export const DEFAULT_CARE_ITEMS: CareItem[] = [
+  { id: 'feed-kibble', category: 'feed', name: 'Kibble', icon: '🍖' },
+  { id: 'feed-wet', category: 'feed', name: 'Wet Food', icon: '🥫' },
+  { id: 'feed-treat', category: 'feed', name: 'Treat', icon: '🦴' },
+  { id: 'feed-custom', category: 'feed', name: 'Custom', icon: '🍽️' },
+  { id: 'play-fetch', category: 'play', name: 'Fetch', icon: '🎾' },
+  { id: 'play-tug', category: 'play', name: 'Tug', icon: '🪢' },
+  { id: 'play-walk', category: 'play', name: 'Walk', icon: '🚶' },
+  { id: 'play-free', category: 'play', name: 'Free Play', icon: '🐕' },
+  { id: 'med-morning', category: 'medicine', name: 'Morning Meds', icon: '💊' },
+  { id: 'med-evening', category: 'medicine', name: 'Evening Meds', icon: '💊' },
   {
-    id: "med-supplement",
-    category: "medicine",
-    name: "Supplement",
-    icon: "🧴",
+    id: 'med-supplement',
+    category: 'medicine',
+    name: 'Supplement',
+    icon: '🧴',
   },
-  { id: "med-custom", category: "medicine", name: "Custom", icon: "🩺" },
+  { id: 'med-custom', category: 'medicine', name: 'Custom', icon: '🩺' },
 ];
 
 export function getItemsByCategory(category: ActionCategory): CareItem[] {
-  return DEFAULT_ITEMS.filter((item) => item.category === category);
+  return DEFAULT_CARE_ITEMS.filter((item) => item.category === category);
 }
 
+// Backwards compatibility - these are placeholder and should use hooks/useActionLog instead
 export function getAllLogs(): ActionLog[] {
-  const stored = globalThis.localStorage?.getItem(STORAGE_KEY);
-
+  console.warn(
+    'getAllLogs from lib/actions is deprecated. Use hooks/useActionLog instead.'
+  );
+  if (typeof window === 'undefined') {
+    return [];
+  }
+  const stored = globalThis.localStorage?.getItem('scout_action_log');
   if (!stored) {
     return [];
   }
-
   return JSON.parse(stored) as ActionLog[];
 }
 
 export function getTodayLogs(): ActionLog[] {
-  const stored = globalThis.localStorage?.getItem(STORAGE_KEY);
-
+  console.warn(
+    'getTodayLogs from lib/actions is deprecated. Use hooks/useActionLog instead.'
+  );
+  if (typeof window === 'undefined') {
+    return [];
+  }
+  const stored = globalThis.localStorage?.getItem('scout_action_log');
   if (!stored) {
     return [];
   }
@@ -59,8 +73,11 @@ export function logAction(
   category: ActionCategory,
   itemName: string,
   photoUrl?: string,
-  sessionId?: string,
+  sessionId?: string
 ): ActionLog {
+  console.warn(
+    'logAction from lib/actions is deprecated. Use hooks/useActionLog instead.'
+  );
   const newLog: ActionLog = {
     id: crypto.randomUUID(),
     category,
@@ -70,11 +87,15 @@ export function logAction(
     sessionId,
   };
 
-  const stored = globalThis.localStorage?.getItem(STORAGE_KEY);
+  if (typeof window === 'undefined') {
+    return newLog;
+  }
+
+  const stored = globalThis.localStorage?.getItem('scout_action_log');
   const allLogs = stored ? (JSON.parse(stored) as ActionLog[]) : [];
 
   allLogs.push(newLog);
-  globalThis.localStorage?.setItem(STORAGE_KEY, JSON.stringify(allLogs));
+  globalThis.localStorage?.setItem('scout_action_log', JSON.stringify(allLogs));
 
   return newLog;
 }

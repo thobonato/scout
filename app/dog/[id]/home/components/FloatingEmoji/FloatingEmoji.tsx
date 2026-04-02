@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import type { ActionCategory } from "../../types";
+import type { ActionCategory } from '@/types/views';
+import { useState } from 'react';
 
 interface FloatingEmojiProps {
   category: ActionCategory | null;
@@ -9,9 +9,9 @@ interface FloatingEmojiProps {
 }
 
 const EMOJI_SETS: Record<ActionCategory, string[]> = {
-  feed: ["🍖", "🦴", "🥩", "🍗", "😋"],
-  play: ["🎾", "🐕", "⚡", "🏃", "🎉"],
-  medicine: ["💊", "💪", "✨", "🩺", "❤️"],
+  feed: ['🍖', '🦴', '🥩', '🍗', '😋'],
+  play: ['🎾', '🐕', '⚡', '🏃', '🎉'],
+  medicine: ['💊', '💪', '✨', '🩺', '❤️'],
 };
 
 interface FloatingItem {
@@ -62,7 +62,7 @@ export function FloatingEmoji({ category, trigger }: FloatingEmojiProps) {
           className="absolute text-2xl animate-float-emoji"
           style={{
             left: `${item.left}%`,
-            bottom: "20%",
+            bottom: '20%',
             animationDelay: `${item.delay}s`,
           }}
         >

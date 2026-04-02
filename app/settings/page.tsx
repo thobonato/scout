@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { UserPlus, LogOut, Trash2, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { SettingsSection } from "./components/SettingsSection";
-import { ProfileSettingsForm } from "./components/ProfileSettingsForm";
-import { SitterInviteModal } from "./components/SitterInviteModal";
-import type { SettingsFormValues, SitterInvitePayload } from "./types";
+import { Button } from '@/components/ui/button';
+import type { SettingsFormValues, SitterInvitePayload } from '@/types/views';
+import { ChevronRight, LogOut, Trash2, UserPlus } from 'lucide-react';
+import { useState } from 'react';
+import { ProfileSettingsForm } from './components/ProfileSettingsForm';
+import { SettingsSection } from './components/SettingsSection';
+import { SitterInviteModal } from './components/SitterInviteModal';
 
 // ---------------------------------------------------------------------------
 // Mock data — replace with real fetch from /api/settings when ready
 // ---------------------------------------------------------------------------
 const MOCK_SETTINGS: SettingsFormValues = {
-  ownerName: "Alex",
-  email: "alex@example.com",
+  ownerName: 'Alex',
+  email: 'alex@example.com',
   notifications: {
     dailyReminders: true,
     missedTaskAlerts: true,
@@ -24,10 +24,10 @@ const MOCK_SETTINGS: SettingsFormValues = {
 
 const MOCK_SITTERS = [
   {
-    id: "s1",
-    name: "Jordan Lee",
-    email: "jordan@example.com",
-    role: "Full Access" as const,
+    id: 's1',
+    name: 'Jordan Lee',
+    email: 'jordan@example.com',
+    role: 'Full Access' as const,
   },
 ];
 
@@ -38,12 +38,12 @@ export default function SettingsPage() {
   const [formValues, setFormValues] =
     useState<SettingsFormValues>(MOCK_SETTINGS);
   const [isSaving, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<"idle" | "saved">("idle");
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saved'>('idle');
   const [isInviteOpen, setIsInviteOpen] = useState(false);
 
   function handleFormChange(updated: Partial<SettingsFormValues>) {
     setFormValues((prev) => ({ ...prev, ...updated }));
-    setSaveStatus("idle");
+    setSaveStatus('idle');
   }
 
   async function handleSave() {
@@ -52,8 +52,8 @@ export default function SettingsPage() {
     try {
       // TODO: replace with fetch("/api/settings", { method: "PATCH", body: JSON.stringify(formValues) })
       await new Promise((res) => setTimeout(res, 800));
-      setSaveStatus("saved");
-      setTimeout(() => setSaveStatus("idle"), 3000);
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 3000);
     } finally {
       setIsSaving(false);
     }
@@ -62,7 +62,7 @@ export default function SettingsPage() {
   async function handleSendInvite(payload: SitterInvitePayload) {
     // TODO: replace with fetch("/api/sitters/invite", { method: "POST", body: JSON.stringify(payload) })
     await new Promise((res) => setTimeout(res, 1000));
-    console.log("Invite sent:", payload);
+    console.warn('Invite sent:', payload);
   }
 
   return (
@@ -94,9 +94,9 @@ export default function SettingsPage() {
               disabled={isSaving}
               className="rounded-full bg-chewy-blue text-white font-fredoka hover:bg-chewy-blue/90 disabled:opacity-50"
             >
-              {isSaving ? "Saving…" : "Save changes"}
+              {isSaving ? 'Saving…' : 'Save changes'}
             </Button>
-            {saveStatus === "saved" && (
+            {saveStatus === 'saved' && (
               <span className="font-nunito text-sm text-green-600 font-semibold animate-in fade-in">
                 ✓ Saved
               </span>

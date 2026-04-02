@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import type { NotificationSettings, SettingsFormValues } from "../types";
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { cn } from '@/lib/utils';
+import type { NotificationSettings, SettingsFormValues } from '@/types/views';
 
 interface ProfileSettingsFormProps {
   values: SettingsFormValues;
@@ -20,23 +20,23 @@ interface NotificationToggleItem {
 
 const NOTIFICATION_ITEMS: NotificationToggleItem[] = [
   {
-    key: "dailyReminders",
-    label: "Daily reminders",
+    key: 'dailyReminders',
+    label: 'Daily reminders',
     description: "Get a nudge when it's time to feed, medicate, or exercise",
   },
   {
-    key: "missedTaskAlerts",
-    label: "Missed task alerts",
-    description: "Notify me when a task was not completed by end of day",
+    key: 'missedTaskAlerts',
+    label: 'Missed task alerts',
+    description: 'Notify me when a task was not completed by end of day',
   },
   {
-    key: "sitterUpdates",
-    label: "Sitter updates",
+    key: 'sitterUpdates',
+    label: 'Sitter updates',
     description: "See what your sitter logs while you're away",
   },
   {
-    key: "weeklyDigest",
-    label: "Weekly digest",
+    key: 'weeklyDigest',
+    label: 'Weekly digest',
     description: "A summary of your pet's weekly care activity",
   },
 ];
@@ -48,7 +48,7 @@ export function ProfileSettingsForm({
 }: ProfileSettingsFormProps) {
   function handleNotificationToggle(
     key: keyof NotificationSettings,
-    checked: boolean,
+    checked: boolean
   ) {
     onChange({
       notifications: { ...values.notifications, [key]: checked },
@@ -58,8 +58,8 @@ export function ProfileSettingsForm({
   return (
     <div
       className={cn(
-        "space-y-6 transition-opacity duration-200",
-        isSaving && "opacity-60 pointer-events-none",
+        'space-y-6 transition-opacity duration-200',
+        isSaving && 'opacity-60 pointer-events-none'
       )}
     >
       {/* Profile Fields */}

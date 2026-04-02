@@ -1,15 +1,15 @@
-import type { FulfillmentState, StreakState } from "@/app/dog/[id]/home/types";
+import type { FulfillmentState, StreakState } from '@/types/views';
 
-const STORAGE_KEY = "scout_streak_state";
+const STORAGE_KEY = 'scout_streak_state';
 
 function getTodayDate(): string {
-  return new Date().toLocaleDateString("en-CA");
+  return new Date().toLocaleDateString('en-CA');
 }
 
 function getYesterdayDate(): string {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  return yesterday.toLocaleDateString("en-CA");
+  return yesterday.toLocaleDateString('en-CA');
 }
 
 export function loadStreakState(): StreakState {
@@ -23,7 +23,7 @@ export function loadStreakState(): StreakState {
 }
 
 export function checkAndUpdateStreak(
-  fulfillment: FulfillmentState,
+  fulfillment: FulfillmentState
 ): StreakState {
   const isPerfect =
     fulfillment.hunger >= 100 &&

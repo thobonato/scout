@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Copy, Check, Mail, UserCheck } from "lucide-react";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import type { SitterInvitePayload, SitterRole } from "../types";
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
+import type { SitterInvitePayload, SitterRole } from '@/types/views';
+import { Check, Copy, Mail, UserCheck } from 'lucide-react';
+import { useState } from 'react';
 
 interface SitterInviteModalProps {
   petId: string;
@@ -30,18 +30,18 @@ const ROLE_OPTIONS: Array<{
   description: string;
 }> = [
   {
-    value: "full_access",
-    label: "Full Access",
-    description: "Can log tasks, view schedule & health info",
+    value: 'full_access',
+    label: 'Full Access',
+    description: 'Can log tasks, view schedule & health info',
   },
   {
-    value: "view_only",
-    label: "View Only",
-    description: "Can view schedule but cannot log tasks",
+    value: 'view_only',
+    label: 'View Only',
+    description: 'Can view schedule but cannot log tasks',
   },
 ];
 
-const INVITE_LINK_BASE = "https://scout-six-tan.vercel.app/invite";
+const INVITE_LINK_BASE = 'https://scout-six-tan.vercel.app/invite';
 
 export function SitterInviteModal({
   petId,
@@ -50,12 +50,12 @@ export function SitterInviteModal({
   onClose,
   onInvite,
 }: SitterInviteModalProps) {
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState<SitterRole>("full_access");
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState<SitterRole>('full_access');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const [emailError, setEmailError] = useState("");
+  const [emailError, setEmailError] = useState('');
 
   const inviteLink = `${INVITE_LINK_BASE}?pet=${petId}&role=${role}`;
 
@@ -63,16 +63,18 @@ export function SitterInviteModal({
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
     if (!isValid) {
-      setEmailError("Please enter a valid email address");
+      setEmailError('Please enter a valid email address');
     } else {
-      setEmailError("");
+      setEmailError('');
     }
 
     return isValid;
   }
 
   async function handleSendInvite() {
-    if (!validateEmail(email)) {return;}
+    if (!validateEmail(email)) {
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -80,7 +82,7 @@ export function SitterInviteModal({
       await onInvite?.({ email, role, petId });
       setIsSent(true);
     } catch {
-      setEmailError("Failed to send invite. Please try again.");
+      setEmailError('Failed to send invite. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -93,10 +95,10 @@ export function SitterInviteModal({
   }
 
   function handleClose() {
-    setEmail("");
-    setRole("full_access");
+    setEmail('');
+    setRole('full_access');
     setIsSent(false);
-    setEmailError("");
+    setEmailError('');
     onClose();
   }
 
@@ -124,8 +126,8 @@ export function SitterInviteModal({
                 Invite sent!
               </p>
               <p className="font-nunito text-sm text-gray-500 mt-1">
-                We emailed{" "}
-                <span className="font-semibold text-chewy-dark">{email}</span>{" "}
+                We emailed{' '}
+                <span className="font-semibold text-chewy-dark">{email}</span>{' '}
                 with access to {petName}&apos;s profile.
               </p>
             </div>
@@ -156,11 +158,13 @@ export function SitterInviteModal({
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
-                      if (emailError) {validateEmail(e.target.value);}
+                      if (emailError) {
+                        validateEmail(e.target.value);
+                      }
                     }}
                     className={cn(
-                      "pl-9 rounded-xl font-nunito text-sm border-gray-200 focus-visible:ring-chewy-blue",
-                      emailError && "border-red-400 focus-visible:ring-red-400",
+                      'pl-9 rounded-xl font-nunito text-sm border-gray-200 focus-visible:ring-chewy-blue',
+                      emailError && 'border-red-400 focus-visible:ring-red-400'
                     )}
                   />
                 </div>
@@ -183,18 +187,18 @@ export function SitterInviteModal({
                       type="button"
                       onClick={() => setRole(option.value)}
                       className={cn(
-                        "flex flex-col items-start rounded-2xl border p-3 text-left transition-all duration-150",
+                        'flex flex-col items-start rounded-2xl border p-3 text-left transition-all duration-150',
                         role === option.value
-                          ? "border-chewy-blue bg-blue-50"
-                          : "border-gray-200 bg-white hover:border-gray-300",
+                          ? 'border-chewy-blue bg-blue-50'
+                          : 'border-gray-200 bg-white hover:border-gray-300'
                       )}
                     >
                       <span
                         className={cn(
-                          "font-nunito text-sm font-semibold",
+                          'font-nunito text-sm font-semibold',
                           role === option.value
-                            ? "text-chewy-blue"
-                            : "text-chewy-dark",
+                            ? 'text-chewy-blue'
+                            : 'text-chewy-dark'
                         )}
                       >
                         {option.label}
@@ -249,7 +253,7 @@ export function SitterInviteModal({
                 disabled={isSubmitting || !email}
                 className="rounded-full bg-chewy-blue text-white font-fredoka hover:bg-chewy-blue/90 disabled:opacity-50"
               >
-                {isSubmitting ? "Sending…" : "Send Invite"}
+                {isSubmitting ? 'Sending…' : 'Send Invite'}
               </Button>
             </DialogFooter>
           </>

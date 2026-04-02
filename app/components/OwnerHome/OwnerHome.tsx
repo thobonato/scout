@@ -1,25 +1,23 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { ChevronRight, Dog, ClipboardList, Link2 } from "lucide-react";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomNav } from "@/components/BottomNav/BottomNav";
-import { getAllLogs } from "@/lib/actions";
-import { loadSitterSessions } from "@/lib/sitter-sessions";
-import { calculateFulfillment } from "@/lib/fulfillment";
-import type { DogProfile } from "@/app/create-dog/types";
-import type { ActionLog } from "@/app/dog/[id]/home/types";
-import type { SitterSession } from "@/app/dashboard/types";
+import { BottomNav } from '@/components/BottomNav/BottomNav';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import { getAllLogs } from '@/lib/actions';
+import { calculateFulfillment } from '@/lib/gamification';
+import { loadSitterSessions } from '@/lib/sitters';
+import type { ActionLog, DogProfile, SitterSession } from '@/types/views';
+import { ChevronRight, ClipboardList, Dog, Link2 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 
 interface OwnerHomeProps {
   dog: DogProfile;
 }
 
 function isActiveSession(session: SitterSession): boolean {
-  const today = new Date().toLocaleDateString("en-CA");
+  const today = new Date().toLocaleDateString('en-CA');
   return session.startDate <= today && session.endDate >= today;
 }
 
@@ -35,14 +33,14 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
 
   const [sessions] = useState<SitterSession[]>(() =>
     loadSitterSessions()
-      .filter((s) => s.dogId === "temp")
-      .reverse(),
+      .filter((s) => s.dogId === 'temp')
+      .reverse()
   );
 
   const fulfillment = calculateFulfillment(todayLogs);
   const activeSessions = sessions.filter(isActiveSession);
   const avgFulfillment = Math.round(
-    (fulfillment.hunger + fulfillment.exercise + fulfillment.medicine) / 3,
+    (fulfillment.hunger + fulfillment.exercise + fulfillment.medicine) / 3
   );
 
   return (
@@ -92,7 +90,7 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
         {/* Quick stats */}
         <div
           className="animate-fade-up w-full grid grid-cols-3 gap-3"
-          style={{ animationDelay: "0.1s" }}
+          style={{ animationDelay: '0.1s' }}
         >
           <div className="bg-warm-white rounded-2xl p-4 shadow-sm border border-black/5 text-center">
             <p className="font-fredoka text-2xl font-bold text-chewy-blue">
@@ -123,7 +121,7 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
         {/* Fulfillment bars */}
         <div
           className="animate-fade-up w-full bg-warm-white rounded-2xl p-5 shadow-sm border border-black/5"
-          style={{ animationDelay: "0.2s" }}
+          style={{ animationDelay: '0.2s' }}
         >
           <h3 className="font-nunito text-xs font-bold text-text-muted uppercase tracking-widest mb-4">
             Today&apos;s Care
@@ -153,7 +151,7 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
         {/* Quick actions */}
         <div
           className="animate-fade-up w-full flex flex-col gap-3"
-          style={{ animationDelay: "0.3s" }}
+          style={{ animationDelay: '0.3s' }}
         >
           <h3 className="font-nunito text-xs font-bold text-text-muted uppercase tracking-widest">
             Quick Actions
@@ -170,7 +168,7 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
             href="/dashboard"
             icon={ClipboardList}
             label="Sitter Sessions"
-            description={`${sessions.length} session${sessions.length !== 1 ? "s" : ""} · ${activeSessions.length} active`}
+            description={`${sessions.length} session${sessions.length !== 1 ? 's' : ''} · ${activeSessions.length} active`}
             color="bg-chewy-orange/10 text-chewy-orange"
           />
           <QuickAction
@@ -186,7 +184,7 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
         {activeSessions.length > 0 && (
           <div
             className="animate-fade-up w-full bg-warm-white rounded-2xl p-5 shadow-sm border border-black/5"
-            style={{ animationDelay: "0.4s" }}
+            style={{ animationDelay: '0.4s' }}
           >
             <div className="flex items-center gap-2 mb-4">
               <div className="w-2 h-2 rounded-full bg-chewy-blue animate-pulse" />
@@ -209,7 +207,7 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
                     <span className="font-nunito text-xs text-text-muted">
                       {session.pickUpTime && session.dropOffTime
                         ? `${session.pickUpTime} – ${session.dropOffTime}`
-                        : ""}
+                        : ''}
                     </span>
                   </div>
                   <ChevronRight size={16} className="text-text-muted" />
@@ -223,7 +221,7 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
         {todayLogs.length > 0 && (
           <div
             className="animate-fade-up w-full bg-warm-white rounded-2xl p-5 shadow-sm border border-black/5"
-            style={{ animationDelay: "0.5s" }}
+            style={{ animationDelay: '0.5s' }}
           >
             <h3 className="font-nunito text-xs font-bold text-text-muted uppercase tracking-widest mb-4">
               Recent Activity
@@ -233,7 +231,7 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
                 .sort(
                   (a, b) =>
                     new Date(b.timestamp).getTime() -
-                    new Date(a.timestamp).getTime(),
+                    new Date(a.timestamp).getTime()
                 )
                 .slice(0, 4)
                 .map((log) => (
@@ -245,9 +243,9 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
                       {log.itemName}
                     </span>
                     <span className="font-nunito text-xs text-text-muted">
-                      {new Date(log.timestamp).toLocaleTimeString("en-US", {
-                        hour: "numeric",
-                        minute: "2-digit",
+                      {new Date(log.timestamp).toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
                         hour12: true,
                       })}
                     </span>
@@ -266,13 +264,13 @@ export function OwnerHome({ dog }: OwnerHomeProps) {
 // --- Helpers ---
 
 const CATEGORY_ICONS: Record<string, string> = {
-  feed: "🍖",
-  play: "🎾",
-  medicine: "💊",
+  feed: '🍖',
+  play: '🎾',
+  medicine: '💊',
 };
 
 function getCategoryIcon(category: string): string {
-  return CATEGORY_ICONS[category] || "📋";
+  return CATEGORY_ICONS[category] || '📋';
 }
 
 interface MeterRowProps {

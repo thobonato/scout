@@ -1,4 +1,4 @@
-import type { FulfillmentState } from "../../types";
+import type { FulfillmentState } from '@/types/views';
 
 interface FulfillmentMetersProps {
   fulfillment: FulfillmentState;
@@ -6,22 +6,22 @@ interface FulfillmentMetersProps {
 
 const meters = [
   {
-    key: "hunger" as const,
-    label: "Hunger",
-    icon: "🍖",
-    color: "bg-chewy-orange",
+    key: 'hunger' as const,
+    label: 'Hunger',
+    icon: '🍖',
+    color: 'bg-chewy-orange',
   },
   {
-    key: "exercise" as const,
-    label: "Exercise",
-    icon: "🎾",
-    color: "bg-chewy-blue",
+    key: 'exercise' as const,
+    label: 'Exercise',
+    icon: '🎾',
+    color: 'bg-chewy-blue',
   },
   {
-    key: "medicine" as const,
-    label: "Medicine",
-    icon: "💊",
-    color: "bg-chewy-orange",
+    key: 'medicine' as const,
+    label: 'Medicine',
+    icon: '💊',
+    color: 'bg-chewy-orange',
   },
 ];
 

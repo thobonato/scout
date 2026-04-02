@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import Image from "next/image";
-import { Camera } from "lucide-react";
-import type { ActionCategory, CareItem } from "../../types";
+import type { ActionCategory, CareItem } from '@/types/views';
+import { Camera } from 'lucide-react';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 interface ItemModalProps {
   isOpen: boolean;
@@ -14,9 +14,9 @@ interface ItemModalProps {
 }
 
 const categoryTitles: Record<ActionCategory, string> = {
-  feed: "Feed Your Dog",
-  play: "Play Time",
-  medicine: "Give Medicine",
+  feed: 'Feed Your Dog',
+  play: 'Play Time',
+  medicine: 'Give Medicine',
 };
 
 export function ItemModal({
@@ -27,8 +27,8 @@ export function ItemModal({
   onClose,
 }: ItemModalProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [step, setStep] = useState<"select" | "photo">("select");
-  const [photoUrl, setPhotoUrl] = useState("");
+  const [step, setStep] = useState<'select' | 'photo'>('select');
+  const [photoUrl, setPhotoUrl] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) {
@@ -40,7 +40,7 @@ export function ItemModal({
       return;
     }
 
-    setStep("photo");
+    setStep('photo');
   }
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -55,7 +55,7 @@ export function ItemModal({
     reader.onload = (e) => {
       const result = e.target?.result;
 
-      if (typeof result === "string") {
+      if (typeof result === 'string') {
         setPhotoUrl(result);
       }
     };
@@ -92,8 +92,8 @@ export function ItemModal({
 
   function resetState(): void {
     setSelectedId(null);
-    setStep("select");
-    setPhotoUrl("");
+    setStep('select');
+    setPhotoUrl('');
   }
 
   return (
@@ -111,7 +111,7 @@ export function ItemModal({
           <div className="w-10 h-1 rounded-full bg-black/10" />
         </div>
 
-        {step === "select" && (
+        {step === 'select' && (
           <>
             <h3 className="font-fredoka text-xl font-semibold text-text-dark mb-6 text-center">
               {categoryTitles[category]}
@@ -129,8 +129,8 @@ export function ItemModal({
                     onClick={() => setSelectedId(item.id)}
                     className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all ${
                       isSelected
-                        ? "border-chewy-blue bg-chewy-blue/5 shadow-sm"
-                        : "border-transparent bg-cream hover:bg-cream/80"
+                        ? 'border-chewy-blue bg-chewy-blue/5 shadow-sm'
+                        : 'border-transparent bg-cream hover:bg-cream/80'
                     }`}
                   >
                     <span className="text-2xl">{item.icon}</span>
@@ -154,7 +154,7 @@ export function ItemModal({
           </>
         )}
 
-        {step === "photo" && (
+        {step === 'photo' && (
           <>
             <h3 className="font-fredoka text-xl font-semibold text-text-dark mb-2 text-center">
               Add a Photo

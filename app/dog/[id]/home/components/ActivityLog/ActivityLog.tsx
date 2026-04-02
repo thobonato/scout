@@ -1,22 +1,22 @@
-import Image from "next/image";
-import type { ActionLog } from "../../types";
+import type { ActionLog } from '@/types/views';
+import Image from 'next/image';
 
 interface ActivityLogProps {
   logs: ActionLog[];
 }
 
 const categoryIcons: Record<string, string> = {
-  feed: "🍖",
-  play: "🎾",
-  medicine: "💊",
+  feed: '🍖',
+  play: '🎾',
+  medicine: '💊',
 };
 
 function formatTime(timestamp: string): string {
   const date = new Date(timestamp);
 
-  return date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
     hour12: true,
   });
 }
@@ -39,7 +39,7 @@ export function ActivityLog({ logs }: ActivityLogProps) {
           {recentLogs.map((log) => (
             <div key={log.id} className="flex items-center gap-3 py-2">
               <span className="text-lg">
-                {categoryIcons[log.category] || "📋"}
+                {categoryIcons[log.category] || '📋'}
               </span>
 
               <div className="flex-1 min-w-0">

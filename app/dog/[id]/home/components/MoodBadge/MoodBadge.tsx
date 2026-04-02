@@ -1,4 +1,4 @@
-import type { MoodState } from "../../types";
+import type { MoodState } from '@/types/views';
 
 interface MoodBadgeProps {
   mood: MoodState;

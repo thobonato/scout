@@ -1,7 +1,6 @@
-import Link from "next/link";
-import { Calendar, Clock, ChevronRight } from "lucide-react";
-import type { ActionLog } from "@/app/dog/[id]/home/types";
-import type { SitterSession } from "../../types";
+import type { ActionLog, SitterSession } from '@/types/views';
+import { Calendar, ChevronRight, Clock } from 'lucide-react';
+import Link from 'next/link';
 
 interface SitterActivityFeedProps {
   logs: ActionLog[];
@@ -11,17 +10,17 @@ interface SitterActivityFeedProps {
 function formatDateRange(start: string, end: string): string {
   const startDate = new Date(`${start}T00:00:00`);
   const endDate = new Date(`${end}T00:00:00`);
-  const opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
+  const opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
 
   if (start === end) {
-    return startDate.toLocaleDateString("en-US", opts);
+    return startDate.toLocaleDateString('en-US', opts);
   }
 
-  return `${startDate.toLocaleDateString("en-US", opts)} – ${endDate.toLocaleDateString("en-US", opts)}`;
+  return `${startDate.toLocaleDateString('en-US', opts)} – ${endDate.toLocaleDateString('en-US', opts)}`;
 }
 
 function isActiveSession(session: SitterSession): boolean {
-  const today = new Date().toLocaleDateString("en-CA");
+  const today = new Date().toLocaleDateString('en-CA');
   return session.startDate <= today && session.endDate >= today;
 }
 
@@ -35,9 +34,9 @@ interface SessionSummary {
 
 function summarizeLogs(sessionLogs: ActionLog[]): SessionSummary {
   return {
-    feedCount: sessionLogs.filter((l) => l.category === "feed").length,
-    playCount: sessionLogs.filter((l) => l.category === "play").length,
-    medCount: sessionLogs.filter((l) => l.category === "medicine").length,
+    feedCount: sessionLogs.filter((l) => l.category === 'feed').length,
+    playCount: sessionLogs.filter((l) => l.category === 'play').length,
+    medCount: sessionLogs.filter((l) => l.category === 'medicine').length,
     photoCount: sessionLogs.filter((l) => l.photoUrl).length,
     lastAction: sessionLogs.length > 0 ? sessionLogs[0].timestamp : null,
   };
@@ -49,7 +48,7 @@ function formatTimeSince(timestamp: string): string {
   const diffHrs = Math.floor(diffMin / 60);
 
   if (diffMin < 1) {
-    return "Just now";
+    return 'Just now';
   }
   if (diffMin < 60) {
     return `${diffMin}m ago`;
@@ -58,9 +57,9 @@ function formatTimeSince(timestamp: string): string {
     return `${diffHrs}h ago`;
   }
 
-  return new Date(timestamp).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
+  return new Date(timestamp).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
   });
 }
 
@@ -103,7 +102,7 @@ export function SitterActivityFeed({
                 .sort(
                   (a, b) =>
                     new Date(b.timestamp).getTime() -
-                    new Date(a.timestamp).getTime(),
+                    new Date(a.timestamp).getTime()
                 );
               const summary = summarizeLogs(sessionLogs);
 
@@ -135,7 +134,7 @@ export function SitterActivityFeed({
                 .sort(
                   (a, b) =>
                     new Date(b.timestamp).getTime() -
-                    new Date(a.timestamp).getTime(),
+                    new Date(a.timestamp).getTime()
                 );
               const summary = summarizeLogs(sessionLogs);
 
@@ -176,8 +175,8 @@ function SessionRow({
       href={`/dashboard/session/${session.id}`}
       className={`block rounded-xl p-4 transition-all hover:shadow-sm ${
         isActive
-          ? "bg-chewy-blue/5 border border-chewy-blue/10 hover:bg-chewy-blue/8"
-          : "bg-cream hover:bg-cream/80"
+          ? 'bg-chewy-blue/5 border border-chewy-blue/10 hover:bg-chewy-blue/8'
+          : 'bg-cream hover:bg-cream/80'
       }`}
     >
       <div className="flex items-center gap-3">
@@ -231,7 +230,7 @@ function SessionRow({
             </span>
           )}
           <span className="font-nunito text-[11px] text-text-muted ml-auto">
-            {summary.lastAction ? formatTimeSince(summary.lastAction) : ""}
+            {summary.lastAction ? formatTimeSince(summary.lastAction) : ''}
           </span>
         </div>
       )}

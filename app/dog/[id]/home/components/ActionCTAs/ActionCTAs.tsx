@@ -1,5 +1,5 @@
-import { Utensils, Dog, Pill } from "lucide-react";
-import type { ActionCategory } from "../../types";
+import type { ActionCategory } from '@/types/views';
+import { Dog, Pill, Utensils } from 'lucide-react';
 
 interface ActionCTAsProps {
   onAction: (category: ActionCategory) => void;
@@ -8,22 +8,22 @@ interface ActionCTAsProps {
 
 const actions = [
   {
-    category: "feed" as ActionCategory,
-    label: "Feed",
+    category: 'feed' as ActionCategory,
+    label: 'Feed',
     icon: Utensils,
-    colorClasses: "bg-chewy-orange hover:bg-chewy-orange-dark",
+    colorClasses: 'bg-chewy-orange hover:bg-chewy-orange-dark',
   },
   {
-    category: "play" as ActionCategory,
-    label: "Play",
+    category: 'play' as ActionCategory,
+    label: 'Play',
     icon: Dog,
-    colorClasses: "bg-chewy-blue hover:bg-chewy-blue-dark",
+    colorClasses: 'bg-chewy-blue hover:bg-chewy-blue-dark',
   },
   {
-    category: "medicine" as ActionCategory,
-    label: "Meds",
+    category: 'medicine' as ActionCategory,
+    label: 'Meds',
     icon: Pill,
-    colorClasses: "bg-chewy-orange hover:bg-chewy-orange-dark",
+    colorClasses: 'bg-chewy-orange hover:bg-chewy-orange-dark',
   },
 ];
 
@@ -32,7 +32,7 @@ function formatTimeSince(timestamp: string | null): {
   colorClass: string;
 } {
   if (!timestamp) {
-    return { text: "Not yet", colorClass: "text-chewy-orange" };
+    return { text: 'Not yet', colorClass: 'text-chewy-orange' };
   }
 
   const diffMs = Date.now() - new Date(timestamp).getTime();
@@ -40,14 +40,14 @@ function formatTimeSince(timestamp: string | null): {
   const diffHours = Math.floor(diffMinutes / 60);
 
   if (diffMinutes < 60) {
-    return { text: `${diffMinutes}m ago`, colorClass: "text-white/80" };
+    return { text: `${diffMinutes}m ago`, colorClass: 'text-white/80' };
   }
 
   if (diffHours < 3) {
-    return { text: `${diffHours}h ago`, colorClass: "text-white/80" };
+    return { text: `${diffHours}h ago`, colorClass: 'text-white/80' };
   }
 
-  return { text: `${diffHours}h ago`, colorClass: "text-white/60" };
+  return { text: `${diffHours}h ago`, colorClass: 'text-white/60' };
 }
 
 export function ActionCTAs({ onAction, lastActionTimes }: ActionCTAsProps) {

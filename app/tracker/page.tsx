@@ -1,63 +1,63 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ProgressRing } from "./components/ProgressRing";
-import { TrackerCategorySection } from "./components/TrackerCategorySection";
-import type { DailyTrackerData, TrackerCategory } from "./types";
+import type { DailyTrackerData, TrackerCategory } from '@/types/views';
+import { useState } from 'react';
+import { ProgressRing } from './components/ProgressRing';
+import { TrackerCategorySection } from './components/TrackerCategorySection';
 
 // ---------------------------------------------------------------------------
 // Mock data — swap this fetch with GET /api/tracker when the route is ready
 // ---------------------------------------------------------------------------
 const MOCK_DATA: DailyTrackerData = {
   date: new Date().toISOString(),
-  petName: "Biscuit",
+  petName: 'Biscuit',
   tasks: [
     {
-      id: "f1",
-      category: "food",
-      label: "Morning kibble (1 cup)",
-      time: "7:00 AM",
+      id: 'f1',
+      category: 'food',
+      label: 'Morning kibble (1 cup)',
+      time: '7:00 AM',
       isCompleted: false,
     },
     {
-      id: "f2",
-      category: "food",
-      label: "Evening kibble (1 cup)",
-      time: "6:00 PM",
+      id: 'f2',
+      category: 'food',
+      label: 'Evening kibble (1 cup)',
+      time: '6:00 PM',
       isCompleted: false,
     },
     {
-      id: "f3",
-      category: "food",
-      label: "Fresh water refill",
+      id: 'f3',
+      category: 'food',
+      label: 'Fresh water refill',
       isCompleted: true,
     },
     {
-      id: "e1",
-      category: "exercise",
-      label: "Morning walk (30 min)",
-      time: "8:00 AM",
+      id: 'e1',
+      category: 'exercise',
+      label: 'Morning walk (30 min)',
+      time: '8:00 AM',
       isCompleted: false,
     },
     {
-      id: "e2",
-      category: "exercise",
-      label: "Backyard play session",
-      time: "4:00 PM",
+      id: 'e2',
+      category: 'exercise',
+      label: 'Backyard play session',
+      time: '4:00 PM',
       isCompleted: false,
     },
     {
-      id: "m1",
-      category: "medicine",
-      label: "Flea & tick tablet",
-      note: "Give with food",
-      time: "7:00 AM",
+      id: 'm1',
+      category: 'medicine',
+      label: 'Flea & tick tablet',
+      note: 'Give with food',
+      time: '7:00 AM',
       isCompleted: false,
     },
     {
-      id: "m2",
-      category: "medicine",
-      label: "Joint supplement (2 chews)",
+      id: 'm2',
+      category: 'medicine',
+      label: 'Joint supplement (2 chews)',
       isCompleted: true,
     },
   ],
@@ -70,24 +70,24 @@ const MOCK_DATA: DailyTrackerData = {
 export default function TrackerPage() {
   const [data, setData] = useState<DailyTrackerData>(MOCK_DATA);
 
-  const today = new Date(data.date).toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
+  const today = new Date(data.date).toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
   });
 
   const completedTotal = data.tasks.filter((t) => t.isCompleted).length;
   const overallPercentage = Math.round(
-    (completedTotal / data.tasks.length) * 100,
+    (completedTotal / data.tasks.length) * 100
   );
 
-  const categories: TrackerCategory[] = ["food", "exercise", "medicine"];
+  const categories: TrackerCategory[] = ['food', 'exercise', 'medicine'];
 
   function handleToggle(id: string) {
     setData((prev) => ({
       ...prev,
       tasks: prev.tasks.map((t) =>
-        t.id === id ? { ...t, isCompleted: !t.isCompleted } : t,
+        t.id === id ? { ...t, isCompleted: !t.isCompleted } : t
       ),
     }));
   }

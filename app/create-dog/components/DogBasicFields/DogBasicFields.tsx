@@ -1,4 +1,4 @@
-import type { DogGender, DogSize } from "../../types";
+import type { DogGender, DogSize } from '@/types/views';
 
 interface DogBasicFieldsProps {
   name: string;

@@ -1,100 +1,82 @@
 # Scout
 
-## Table of Contents
+Scout is a gamified pet care platform that helps families and kids care for a
+real pet by combining daily routine tracking, health management, and a virtual
+pet experience.
 
-1. [Prerequisites](#prerequisites)
-2. [Project Setup](#project-setup)
-3. [Getting Secrets](#getting-secrets)
-4. [Running Locally](#running-locally)
-5. [Contributing](#contributing)
-6. [Deploying](#deploying)
+**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 ·
+shadcn/ui · Supabase · pnpm · Vercel
 
 ---
 
-## Prerequisites
+## Quick Start
 
-Complete these steps IF not already installed.
-
-### 1. Homebrew
-
-Homebrew is the package manager used to install most tools.
-
-**Check if installed:**
+### 1. Setup Environment
 
 ```bash
-brew --version
+# Install dependencies
+pnpm install
+pnpm add @supabase/supabase-js
+
+# Create .env.local with Supabase credentials
+# See: docs/SETUP.md
 ```
 
-If not installed:
+### 2. Run Database Migration
+
+1. Go to https://app.supabase.com → Your project
+2. SQL Editor → New Query
+3. Copy & paste: `supabase/migrations/001_create_scout_schema.sql`
+4. Click "Run"
+
+**Detailed setup:** See [docs/SETUP.md](docs/SETUP.md)
+
+### 3. Start Dev Server
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+pnpm dev
 ```
 
-If installed, make sure it's up to date:
+Open http://localhost:3000
+
+---
+
+## Documentation
+
+| Document                                     | Purpose                                                     |
+| -------------------------------------------- | ----------------------------------------------------------- |
+| [AGENTS.md](AGENTS.md)                       | **Code style, architecture rules, contribution guidelines** |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design, API endpoints, implementation roadmap        |
+| [docs/SETUP.md](docs/SETUP.md)               | Complete setup & configuration guide                        |
+| [docs/DATABASE.md](docs/DATABASE.md)         | Database schema reference (10 tables with relationships)    |
+| [docs/DESIGN.md](docs/DESIGN.md)             | Design system (colors, typography, components)              |
+| [docs/PAGES.md](docs/PAGES.md)               | UI page specifications                                      |
+
+**Start with:** `AGENTS.md` for code standards, then `docs/SETUP.md` for
+configuration.
+
+---
+
+## Development
+
+### Before Pushing
 
 ```bash
-brew update
+pnpm lint    # ESLint - must pass
+pnpm build   # Type-check + build
 ```
 
-### 2. NVM (Node Version Manager)
+Commit messages follow convention: `feat:`, `fix:`, `refactor:`, etc.
 
-NVM lets you install and switch between Node versions.
+See [AGENTS.md](AGENTS.md) for complete guidelines.
 
-**Check if installed:**
+### Repository Branch Model
 
-```bash
-nvm --version
-```
+- **main** — production (always through PR)
+- **development** — daily work
+- **Feature branches:** `git checkout -b <github-username>/<feature-name>`
 
-If not installed:
-
-```bash
-brew install nvm
-```
-
-Then follow the instructions printed at the end of the install to add NVM to your shell profile (usually adding a few lines to `~/.zshrc`), and restart your terminal.
-
-If installed, upgrade:
-
-```bash
-brew upgrade nvm
-```
-
-### 3. Node
-
-**Check if installed:**
-
-```bash
-node --version
-```
-
-Install or upgrade to the LTS version:
-
-```bash
-nvm install --lts
-nvm use --lts
-```
-
-> Running these commands is safe even if Node is already installed — NVM will just switch to the latest LTS.
-
-### 4. pnpm
-
-This project uses pnpm instead of npm.
-
-**Check if installed:**
-
-```bash
-pnpm --version
-```
-
-If not installed:
-
-```bash
-npm install -g pnpm
-```
-
-If installed, upgrade:
+Never push directly to `main` or `development`.
 
 ```bash
 npm install -g pnpm@latest
@@ -121,9 +103,27 @@ pnpm install
 
 ## Getting Secrets
 
-We use Doppler to manage environment variables. You need to do this before the app will run.
+Scout uses Supabase for the backend database. You need to set up these
+credentials.
 
-### 1. Install Doppler
+### Quick Start
+
+Follow the **[Complete Setup Guide](docs/SETUP_GUIDE.md)** for step-by-step
+instructions:
+
+1. ✅ Get Supabase keys
+2. ✅ Add to `.env.local`
+3. ✅ Install dependencies
+4. ✅ Run database migration
+5. ✅ Test the connection
+
+**Time: ~15 minutes**
+
+### If using Doppler (optional)
+
+We also have Doppler for centralized secrets management:
+
+#### 1. Install Doppler
 
 ```bash
 brew install gnupg
@@ -131,21 +131,21 @@ brew install dopplerhq/cli/doppler
 doppler update
 ```
 
-### 2. Log in
+#### 2. Log in
 
 ```bash
 doppler login
 ```
 
-> We use a shared login — ask @Thomaz for the credentials.
+> Ask @Thomaz for Doppler credentials
 
-### 3. Connect to the project
+#### 3. Connect to the project
 
 ```bash
 doppler setup --project chewy --config dev
 ```
 
-### 4. Download secrets to a local env file
+#### 4. Download secrets
 
 ```bash
 doppler secrets download --no-file --format env > .env.local
@@ -174,7 +174,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Committing
 
-We use Husky + ESLint as a pre-commit hook. Your commit will be blocked if there are lint errors.
+We use Husky + ESLint as a pre-commit hook. Your commit will be blocked if there
+are lint errors.
 
 - Fix any errors the hook reports before committing
 - The error output is explicit about what needs to be changed

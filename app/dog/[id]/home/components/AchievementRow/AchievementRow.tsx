@@ -1,4 +1,4 @@
-import type { Achievement } from "../../types";
+import type { Achievement } from '@/types/views';
 
 interface AchievementRowProps {
   achievements: Achievement[];
@@ -28,8 +28,8 @@ export function AchievementRow({ achievements }: AchievementRowProps) {
               title={`${achievement.name}: ${achievement.description}`}
               className={`flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center text-2xl transition-all ${
                 isUnlocked
-                  ? "bg-cream shadow-sm"
-                  : "bg-black/5 opacity-30 grayscale"
+                  ? 'bg-cream shadow-sm'
+                  : 'bg-black/5 opacity-30 grayscale'
               }`}
             >
               {achievement.icon}
