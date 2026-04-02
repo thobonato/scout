@@ -1,0 +1,128 @@
+# macOS Setup
+
+## Prerequisites
+
+Complete these steps IF not already installed.
+
+### 1. Homebrew
+
+Homebrew is the package manager used to install most tools.
+
+**Check if installed:**
+
+```bash
+brew --version
+```
+
+If not installed:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+If installed, make sure it's up to date:
+
+```bash
+brew update
+```
+
+### 2. NVM (Node Version Manager)
+
+NVM lets you install and switch between Node versions.
+
+**Check if installed:**
+
+```bash
+nvm --version
+```
+
+If not installed:
+
+```bash
+brew install nvm
+```
+
+Then follow the instructions printed at the end of the install to add NVM to
+your shell profile (usually adding a few lines to `~/.zshrc`), and restart your
+terminal.
+
+If installed, upgrade:
+
+```bash
+brew upgrade nvm
+```
+
+### 3. Node
+
+**Check if installed:**
+
+```bash
+node --version
+```
+
+Install or upgrade to the LTS version:
+
+```bash
+nvm install --lts
+nvm use --lts
+```
+
+> Running these commands is safe even if Node is already installed — NVM will
+> just switch to the latest LTS.
+
+### 4. pnpm
+
+This project uses pnpm instead of npm.
+
+**Check if installed:**
+
+```bash
+pnpm --version
+```
+
+If not installed:
+
+```bash
+npm install -g pnpm
+```
+
+If installed, upgrade:
+
+```bash
+npm install -g pnpm@latest
+```
+
+## Getting Secrets
+
+We use Doppler to manage environment variables. You need to do this before the
+app will run.
+
+### 1. Install Doppler
+
+```bash
+brew install gnupg
+brew install dopplerhq/cli/doppler
+doppler update
+```
+
+### 2. Log in
+
+```bash
+doppler login
+```
+
+> We use a shared login — ask @Thomaz for the credentials.
+
+### 3. Connect to the project
+
+```bash
+doppler setup --project chewy --config dev
+```
+
+### 4. Download secrets to a local env file
+
+```bash
+doppler secrets download --no-file --format env > .env.local
+```
+
+> Re-run step 4 any time secrets are updated.

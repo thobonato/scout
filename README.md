@@ -13,92 +13,12 @@
 
 ## Prerequisites
 
-Complete these steps IF not already installed.
+Choose your operating system for setup instructions:
 
-### 1. Homebrew
-
-Homebrew is the package manager used to install most tools.
-
-**Check if installed:**
-
-```bash
-brew --version
-```
-
-If not installed:
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-If installed, make sure it's up to date:
-
-```bash
-brew update
-```
-
-### 2. NVM (Node Version Manager)
-
-NVM lets you install and switch between Node versions.
-
-**Check if installed:**
-
-```bash
-nvm --version
-```
-
-If not installed:
-
-```bash
-brew install nvm
-```
-
-Then follow the instructions printed at the end of the install to add NVM to your shell profile (usually adding a few lines to `~/.zshrc`), and restart your terminal.
-
-If installed, upgrade:
-
-```bash
-brew upgrade nvm
-```
-
-### 3. Node
-
-**Check if installed:**
-
-```bash
-node --version
-```
-
-Install or upgrade to the LTS version:
-
-```bash
-nvm install --lts
-nvm use --lts
-```
-
-> Running these commands is safe even if Node is already installed — NVM will just switch to the latest LTS.
-
-### 4. pnpm
-
-This project uses pnpm instead of npm.
-
-**Check if installed:**
-
-```bash
-pnpm --version
-```
-
-If not installed:
-
-```bash
-npm install -g pnpm
-```
-
-If installed, upgrade:
-
-```bash
-npm install -g pnpm@latest
-```
+- **[macOS Setup](docs/setup/mac.md)** — Homebrew, NVM, Node, pnpm, and Doppler
+- **[Ubuntu Setup](docs/setup/ubuntu.md)** — apt, NVM, Node, pnpm, and Doppler
+- **[Windows Setup](docs/setup/windows.md)** — Direct installation and
+  Chocolatey options
 
 ---
 
@@ -121,37 +41,18 @@ pnpm install
 
 ## Getting Secrets
 
-We use Doppler to manage environment variables. You need to do this before the app will run.
-
-### 1. Install Doppler
-
-```bash
-brew install gnupg
-brew install dopplerhq/cli/doppler
-doppler update
-```
-
-### 2. Log in
-
-```bash
-doppler login
-```
-
-> We use a shared login — ask @Thomaz for the credentials.
-
-### 3. Connect to the project
+Doppler installation and configuration is included in your OS-specific setup
+guide above. Once Doppler is installed and you've logged in, complete these
+final steps:
 
 ```bash
 doppler setup --project chewy --config dev
-```
-
-### 4. Download secrets to a local env file
-
-```bash
 doppler secrets download --no-file --format env > .env.local
 ```
 
-> Re-run step 4 any time secrets are updated.
+> We use a shared Doppler login — ask @Thomaz for the credentials.
+
+> Re-run the `doppler secrets download` command any time secrets are updated.
 
 ---
 
@@ -174,7 +75,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Committing
 
-We use Husky + ESLint as a pre-commit hook. Your commit will be blocked if there are lint errors.
+We use Husky + ESLint as a pre-commit hook. Your commit will be blocked if there
+are lint errors.
 
 - Fix any errors the hook reports before committing
 - The error output is explicit about what needs to be changed
