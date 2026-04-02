@@ -22,6 +22,7 @@ import { deriveMood } from "@/lib/mood";
 import { loadXPState, awardXP } from "@/lib/xp";
 import { loadStreakState, checkAndUpdateStreak } from "@/lib/streak";
 import { loadAchievements, checkAchievements } from "@/lib/achievements";
+import { loadDogProfile } from "@/lib/dog-profile";
 import type { DogProfile } from "@/app/create-dog/types";
 import type {
   ActionCategory,
@@ -32,20 +33,6 @@ import type {
   StreakState,
   Achievement,
 } from "./home/types";
-
-function loadDogProfile(): DogProfile | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const stored = localStorage.getItem("scout_dog_profile");
-
-  if (!stored) {
-    return null;
-  }
-
-  return JSON.parse(stored) as DogProfile;
-}
 
 function deriveLastActionTimes(
   logs: ActionLog[],
@@ -69,7 +56,9 @@ export default function PetHomePage() {
   const params = useParams();
   const dogId = params.id as string;
 
-  const [dog] = useState<DogProfile | null>(loadDogProfile);
+  const [dog] = useState<DogProfile | null>(() =>
+    typeof window !== "undefined" ? loadDogProfile() : null,
+  );
   const [logs, setLogs] = useState<ActionLog[]>(() =>
     typeof window !== "undefined" ? getTodayLogs() : [],
   );
