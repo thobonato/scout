@@ -3,42 +3,125 @@
 import { BottomNav } from '@/components/BottomNav/BottomNav';
 import { PageBackground } from '@/components/PageBackground/PageBackground';
 import { PawIcon } from '@/components/PawIcon/PawIcon';
+import type { Pet } from '@/app/create-dog/types';
+import type { ActionLog, ActionCategory } from '@/app/dog/[id]/home/types';
+import type { SitterSession } from './types';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import type { ActionLog } from '@/app/dog/[id]/home/types';
-import type { SitterSession } from './types';
 import { DogSummary } from './components/DogSummary/DogSummary';
 import { RoutineOverview } from './components/RoutineOverview/RoutineOverview';
 import { SitterActivityFeed } from './components/SitterActivityFeed/SitterActivityFeed';
 import { SitterLink } from './components/SitterLink/SitterLink';
 
+// Raw Supabase row shapes — only the fields we actually use.
+interface PetRow {
+  id: string;
+  owner_id: string;
+  name: string;
+  breed: string | null;
+  age_months: number | null;
+  weight_lbs: number | null;
+  gender: string | null;
+  size: string | null;
+  coat_color: string | null;
+  photo_url: string | null;
+  avatar_url: string | null;
+  medical_notes: string | null;
+  is_spayed_neutered: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ActionLogRow {
+  id: string;
+  activity_type: string;
+  item_name: string;
+  logged_at: string;
+  photo_url: string | null;
+  session_id: string | null;
+}
+
+interface SitterSessionRow {
+  id: string;
+  pet_id: string;
+  sitter_id: string;
+  owner_id: string;
+  start_date: string;
+  end_date: string;
+  drop_off_time: string | null;
+  pick_up_time: string | null;
+  role: 'full_access' | 'view_only';
+  is_active: boolean;
+  created_at: string;
+}
+
+function toPet(row: PetRow): Pet {
+  return {
+    id: row.id,
+    ownerId: row.owner_id,
+    name: row.name,
+    breed: row.breed,
+    ageMonths: row.age_months,
+    weightLbs: row.weight_lbs,
+    gender: (row.gender as Pet['gender']) ?? null,
+    size: (row.size as Pet['size']) ?? null,
+    coatColor: row.coat_color,
+    photoUrl: row.photo_url,
+    avatarUrl: row.avatar_url,
+    medicalNotes: row.medical_notes,
+    isSpayedNeutered: row.is_spayed_neutered,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+function toActionLog(row: ActionLogRow): ActionLog {
+  return {
+    id: row.id,
+    category: row.activity_type as ActionCategory,
+    itemName: row.item_name,
+    timestamp: row.logged_at,
+    photoUrl: row.photo_url ?? undefined,
+    sessionId: row.session_id ?? undefined,
+  };
+}
+
+function toSitterSession(row: SitterSessionRow): SitterSession {
+  return {
+    id: row.id,
+    petId: row.pet_id,
+    sitterId: row.sitter_id,
+    ownerId: row.owner_id,
+    startDate: row.start_date,
+    endDate: row.end_date,
+    dropOffTime: row.drop_off_time,
+    pickUpTime: row.pick_up_time,
+    role: row.role,
+    isActive: row.is_active,
+    createdAt: row.created_at,
+  };
+}
+
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  // 1. Authenticate the user securely on the server
   const {
     data: { user },
     error: authError,
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    // Redirect to your login or landing page if not authenticated
     redirect('/');
   }
 
-  // 2. Fetch the user's dog. We query the 'pets' table.
-  // Your RLS policy "Owner can view own pet" ensures they only see their dogs.
-  const { data: pets } = await supabase
+  const { data: petRows } = await supabase
     .from('pets')
     .select('*')
     .order('created_at', { ascending: false });
 
-  const dog = pets?.[0] || null;
+  const dog = petRows?.[0] ? toPet(petRows[0] as PetRow) : null;
 
-  // 3. Fetch logs and sessions only if a dog exists
-  // We use Promise.all to fetch these concurrently, drastically improving load times
-  // TODO (pet CRUD commit): map Supabase snake_case rows to these camelCase types
   let logs: ActionLog[] = [];
   let sessions: SitterSession[] = [];
 
@@ -46,7 +129,9 @@ export default async function DashboardPage() {
     const [logsResponse, sessionsResponse] = await Promise.all([
       supabase
         .from('action_logs')
-        .select('*')
+        .select(
+          'id, activity_type, item_name, logged_at, photo_url, session_id'
+        )
         .eq('pet_id', dog.id)
         .order('logged_at', { ascending: false }),
       supabase
@@ -56,11 +141,12 @@ export default async function DashboardPage() {
         .order('created_at', { ascending: false }),
     ]);
 
-    logs = logsResponse.data || [];
-    sessions = sessionsResponse.data || [];
+    logs = (logsResponse.data ?? []).map((r) => toActionLog(r as ActionLogRow));
+    sessions = (sessionsResponse.data ?? []).map((r) =>
+      toSitterSession(r as SitterSessionRow)
+    );
   }
 
-  // Handle the empty state exactly as your UI originally designed it
   if (!dog) {
     return (
       <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-nunito">
@@ -92,7 +178,6 @@ export default async function DashboardPage() {
     );
   }
 
-  // Render the populated dashboard
   return (
     <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center font-nunito">
       <PageBackground />
@@ -112,16 +197,13 @@ export default async function DashboardPage() {
           <div className="w-12" />
         </div>
 
-        {/* Dog summary */}
         <div
           className="animate-fade-up w-full"
           style={{ animationDelay: '0.1s' }}
         >
-          {/* Note: Ensure the DogSummary component can accept the new Supabase row schema */}
           <DogSummary dog={dog} />
         </div>
 
-        {/* Routine overview */}
         <div
           className="animate-fade-up w-full"
           style={{ animationDelay: '0.2s' }}
@@ -129,7 +211,6 @@ export default async function DashboardPage() {
           <RoutineOverview dogId={dog.id} />
         </div>
 
-        {/* Sitter links - dynamically using the actual DB ID instead of 'temp' */}
         <div
           className="animate-fade-up w-full"
           style={{ animationDelay: '0.3s' }}
@@ -137,7 +218,6 @@ export default async function DashboardPage() {
           <SitterLink dogId={dog.id} />
         </div>
 
-        {/* Sitter activity feed */}
         <div
           className="animate-fade-up w-full"
           style={{ animationDelay: '0.4s' }}

@@ -1,14 +1,18 @@
-import Image from "next/image";
-import Link from "next/link";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import type { DogProfile } from "@/app/create-dog/types";
+import Image from 'next/image';
+import Link from 'next/link';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import type { Pet } from '@/app/create-dog/types';
 
 interface DogSummaryProps {
-  dog: DogProfile;
+  dog: Pet;
 }
 
 export function DogSummary({ dog }: DogSummaryProps) {
-  const displayUrl = dog.avatarUrl || dog.photoUrl;
+  const displayUrl = dog.avatarUrl ?? dog.photoUrl;
+  const ageYears = dog.ageMonths ? Math.round(dog.ageMonths / 12) : null;
+  const ageLabel = ageYears
+    ? ` · ${ageYears} ${ageYears === 1 ? 'yr' : 'yrs'}`
+    : '';
 
   return (
     <div className="w-full bg-warm-white rounded-2xl p-6 shadow-sm border border-black/5">
@@ -38,16 +42,14 @@ export function DogSummary({ dog }: DogSummaryProps) {
             {dog.name}
           </h2>
           <p className="font-nunito text-sm text-text-mid">
-            {dog.breed}
-            {dog.age
-              ? ` · ${dog.age} ${Number(dog.age) === 1 ? "yr" : "yrs"}`
-              : ""}
+            {dog.breed ?? 'Unknown breed'}
+            {ageLabel}
           </p>
         </div>
 
         {/* View profile link */}
         <Link
-          href="/dog/temp/profile"
+          href={`/dog/${dog.id}/profile`}
           className="font-nunito text-xs font-bold text-chewy-blue hover:text-chewy-blue-dark transition-colors"
         >
           View
