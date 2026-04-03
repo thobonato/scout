@@ -1,4 +1,10 @@
-import { Utensils, Dog, Pill, Clock } from "lucide-react";
+// app/dashboard/components/RoutineOverview/RoutineOverview.tsx
+
+import { Clock, Dog, Pill, Utensils } from 'lucide-react';
+
+export interface RoutineOverviewProps {
+  dogId: string;
+}
 
 interface RoutineItem {
   category: string;
@@ -9,32 +15,32 @@ interface RoutineItem {
 
 // Placeholder routine items until the Routine Builder is ready
 const PLACEHOLDER_ITEMS: RoutineItem[] = [
-  { category: "food", title: "Breakfast", time: "7:00 AM", frequency: "Daily" },
+  { category: 'food', title: 'Breakfast', time: '7:00 AM', frequency: 'Daily' },
   {
-    category: "medication",
-    title: "Morning Meds",
-    time: "7:30 AM",
-    frequency: "Daily",
+    category: 'medication',
+    title: 'Morning Meds',
+    time: '7:30 AM',
+    frequency: 'Daily',
   },
   {
-    category: "walk",
-    title: "Morning Walk",
-    time: "8:00 AM",
-    frequency: "Daily",
+    category: 'walk',
+    title: 'Morning Walk',
+    time: '8:00 AM',
+    frequency: 'Daily',
   },
-  { category: "food", title: "Lunch", time: "12:00 PM", frequency: "Daily" },
+  { category: 'food', title: 'Lunch', time: '12:00 PM', frequency: 'Daily' },
   {
-    category: "walk",
-    title: "Afternoon Walk",
-    time: "4:00 PM",
-    frequency: "Daily",
+    category: 'walk',
+    title: 'Afternoon Walk',
+    time: '4:00 PM',
+    frequency: 'Daily',
   },
-  { category: "food", title: "Dinner", time: "6:00 PM", frequency: "Daily" },
+  { category: 'food', title: 'Dinner', time: '6:00 PM', frequency: 'Daily' },
   {
-    category: "medication",
-    title: "Evening Meds",
-    time: "8:00 PM",
-    frequency: "As needed",
+    category: 'medication',
+    title: 'Evening Meds',
+    time: '8:00 PM',
+    frequency: 'As needed',
   },
 ];
 
@@ -45,12 +51,18 @@ const categoryIcons: Record<string, typeof Utensils> = {
 };
 
 const categoryColors: Record<string, string> = {
-  food: "text-chewy-orange",
-  medication: "text-chewy-blue",
-  walk: "text-chewy-blue",
+  food: 'text-chewy-orange',
+  medication: 'text-chewy-blue',
+  walk: 'text-chewy-blue',
 };
 
-export function RoutineOverview() {
+/**
+ * Displays the daily routine and care schedule for a specific pet.
+ */
+export function RoutineOverview({ dogId }: RoutineOverviewProps) {
+  // In the future, you will use `dogId` here to fetch the actual routine
+  // items from your Supabase 'inventory' or 'action_logs' tables!
+
   return (
     <div className="w-full bg-warm-white rounded-2xl p-6 shadow-sm border border-black/5">
       <div className="flex justify-between items-center mb-4">
@@ -65,7 +77,7 @@ export function RoutineOverview() {
       <div className="flex flex-col gap-3">
         {PLACEHOLDER_ITEMS.map((item) => {
           const Icon = categoryIcons[item.category] || Clock;
-          const colorClass = categoryColors[item.category] || "text-text-mid";
+          const colorClass = categoryColors[item.category] || 'text-text-mid';
 
           return (
             <div
@@ -93,7 +105,8 @@ export function RoutineOverview() {
 
       <div className="mt-4 pt-4 border-t border-black/5">
         <p className="font-nunito text-xs text-text-muted/60 text-center">
-          Routine Builder coming soon — these are sample items
+          Routine Builder coming soon — these are sample items for Pet ID:{' '}
+          {dogId.slice(0, 8)}...
         </p>
       </div>
     </div>
