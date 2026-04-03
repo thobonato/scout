@@ -1,29 +1,33 @@
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomNav } from "@/components/BottomNav/BottomNav";
-import { AvatarDisplay } from "./home/components/AvatarDisplay/AvatarDisplay";
-import { MoodBadge } from "./home/components/MoodBadge/MoodBadge";
-import { FloatingEmoji } from "./home/components/FloatingEmoji/FloatingEmoji";
-import { ActionCTAs } from "./home/components/ActionCTAs/ActionCTAs";
-import { ItemModal } from "./home/components/ItemModal/ItemModal";
-import { XPBar } from "./home/components/XPBar/XPBar";
-import { StreakBadge } from "./home/components/StreakBadge/StreakBadge";
-import { FulfillmentMeters } from "./home/components/FulfillmentMeters/FulfillmentMeters";
-import { ActivityLog } from "./home/components/ActivityLog/ActivityLog";
-import { AchievementRow } from "./home/components/AchievementRow/AchievementRow";
-import { getItemsByCategory, getTodayLogs, logAction } from "@/lib/actions";
-import { calculateFulfillment } from "@/lib/fulfillment";
-import { deriveMood } from "@/lib/mood";
-import { loadXPState, awardXP } from "@/lib/xp";
-import { loadStreakState, checkAndUpdateStreak } from "@/lib/streak";
-import { loadAchievements, checkAchievements } from "@/lib/achievements";
-import { loadDogProfile } from "@/lib/dog-profile";
-import type { DogProfile } from "@/app/create-dog/types";
+import { useState, useCallback, useEffect } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { BottomNav } from '@/components/BottomNav/BottomNav';
+import { AvatarDisplay } from './home/components/AvatarDisplay/AvatarDisplay';
+import { MoodBadge } from './home/components/MoodBadge/MoodBadge';
+import { FloatingEmoji } from './home/components/FloatingEmoji/FloatingEmoji';
+import { ActionCTAs } from './home/components/ActionCTAs/ActionCTAs';
+import { ItemModal } from './home/components/ItemModal/ItemModal';
+import { XPBar } from './home/components/XPBar/XPBar';
+import { StreakBadge } from './home/components/StreakBadge/StreakBadge';
+import { FulfillmentMeters } from './home/components/FulfillmentMeters/FulfillmentMeters';
+import { ActivityLog } from './home/components/ActivityLog/ActivityLog';
+import { AchievementRow } from './home/components/AchievementRow/AchievementRow';
+import { getItemsByCategory } from '@/lib/care-items';
+import { calculateFulfillment } from '@/lib/fulfillment';
+import { deriveMood } from '@/lib/mood';
+import { loadXPState, awardXP } from '@/lib/xp';
+import { loadStreakState, checkAndUpdateStreak } from '@/lib/streak';
+import { loadAchievements, checkAchievements } from '@/lib/achievements';
+import type {
+  DogProfile,
+  DogGender,
+  DogSize,
+  Pet,
+} from '@/app/create-dog/types';
 import type {
   ActionCategory,
   ActionLog,
@@ -32,10 +36,26 @@ import type {
   XPState,
   StreakState,
   Achievement,
-} from "./home/types";
+} from './home/types';
+
+function petToDogProfile(pet: Pet): DogProfile {
+  return {
+    name: pet.name,
+    breed: pet.breed ?? '',
+    age: pet.ageMonths ? String(Math.round(pet.ageMonths / 12)) : '',
+    photoUrl: pet.photoUrl ?? '',
+    weight: pet.weightLbs ? String(pet.weightLbs) : undefined,
+    gender: (pet.gender as DogGender) ?? undefined,
+    coatColor: pet.coatColor ?? undefined,
+    size: (pet.size as DogSize) ?? undefined,
+    medicalNotes: pet.medicalNotes ?? undefined,
+    isSpayedNeutered: pet.isSpayedNeutered,
+    avatarUrl: pet.avatarUrl ?? undefined,
+  };
+}
 
 function deriveLastActionTimes(
-  logs: ActionLog[],
+  logs: ActionLog[]
 ): Record<ActionCategory, string | null> {
   const result: Record<ActionCategory, string | null> = {
     feed: null,
@@ -56,26 +76,43 @@ export default function PetHomePage() {
   const params = useParams();
   const dogId = params.id as string;
 
-  const [dog] = useState<DogProfile | null>(() =>
-    typeof window !== "undefined" ? loadDogProfile() : null,
-  );
-  const [logs, setLogs] = useState<ActionLog[]>(() =>
-    typeof window !== "undefined" ? getTodayLogs() : [],
-  );
+  const [dog, setDog] = useState<DogProfile | null>(null);
+  const [logs, setLogs] = useState<ActionLog[]>([]);
   const [fulfillment, setFulfillment] = useState<FulfillmentState>(() =>
-    calculateFulfillment(typeof window !== "undefined" ? getTodayLogs() : []),
+    calculateFulfillment([])
   );
   const [xp, setXP] = useState<XPState>(() => loadXPState());
   const [streak, setStreak] = useState<StreakState>(() => loadStreakState());
   const [achievements, setAchievements] = useState<Achievement[]>(() =>
-    loadAchievements(),
+    loadAchievements()
   );
   const [activeCategory, setActiveCategory] = useState<ActionCategory | null>(
-    null,
+    null
   );
-  const [celebrationClass, setCelebrationClass] = useState("");
+  const [celebrationClass, setCelebrationClass] = useState('');
   const [emojiTrigger, setEmojiTrigger] = useState(0);
   const [lastCategory, setLastCategory] = useState<ActionCategory | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/pets/${dogId}`)
+      .then((res) => res.json())
+      .then((body: { data?: Pet }) => {
+        if (body.data) {
+          setDog(petToDogProfile(body.data));
+        }
+      })
+      .catch(() => {});
+
+    fetch(`/api/actions?petId=${dogId}`)
+      .then((res) => res.json())
+      .then((body: { data?: ActionLog[] }) => {
+        if (body.data) {
+          setLogs(body.data);
+          setFulfillment(calculateFulfillment(body.data));
+        }
+      })
+      .catch(() => {});
+  }, [dogId]);
 
   const mood = deriveMood(fulfillment);
   const lastActionTimes = deriveLastActionTimes(logs);
@@ -85,8 +122,24 @@ export default function PetHomePage() {
   }, []);
 
   const handleConfirm = useCallback(
-    (item: CareItem, photoUrl?: string) => {
-      const newLog = logAction(item.category, item.name, photoUrl);
+    async (item: CareItem, photoUrl?: string) => {
+      const res = await fetch('/api/actions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          petId: dogId,
+          category: item.category,
+          itemName: item.name,
+          photoUrl: photoUrl ?? null,
+        }),
+      });
+
+      const body = (await res.json()) as { data?: ActionLog };
+      if (!body.data) {
+        return;
+      }
+
+      const newLog = body.data;
       const updatedLogs = [...logs, newLog];
 
       setLogs(updatedLogs);
@@ -117,10 +170,10 @@ export default function PetHomePage() {
       setEmojiTrigger((prev) => prev + 1);
 
       // Avatar celebration
-      setCelebrationClass("animate-celebrate");
-      setTimeout(() => setCelebrationClass(""), 600);
+      setCelebrationClass('animate-celebrate');
+      setTimeout(() => setCelebrationClass(''), 600);
     },
-    [logs],
+    [logs, dogId]
   );
 
   const handleCloseModal = useCallback(() => {
@@ -200,7 +253,7 @@ export default function PetHomePage() {
         <StreakBadge streak={streak} />
 
         {/* CTAs */}
-        <div className="animate-fade-up" style={{ animationDelay: "0.2s" }}>
+        <div className="animate-fade-up" style={{ animationDelay: '0.2s' }}>
           <ActionCTAs
             onAction={handleAction}
             lastActionTimes={lastActionTimes}
@@ -210,7 +263,7 @@ export default function PetHomePage() {
         {/* XP Bar */}
         <div
           className="animate-fade-up w-full flex justify-center"
-          style={{ animationDelay: "0.3s" }}
+          style={{ animationDelay: '0.3s' }}
         >
           <XPBar xp={xp} />
         </div>
@@ -218,7 +271,7 @@ export default function PetHomePage() {
         {/* Fulfillment meters */}
         <div
           className="animate-fade-up w-full flex justify-center"
-          style={{ animationDelay: "0.4s" }}
+          style={{ animationDelay: '0.4s' }}
         >
           <FulfillmentMeters fulfillment={fulfillment} />
         </div>
@@ -226,7 +279,7 @@ export default function PetHomePage() {
         {/* Activity log */}
         <div
           className="animate-fade-up w-full flex justify-center"
-          style={{ animationDelay: "0.5s" }}
+          style={{ animationDelay: '0.5s' }}
         >
           <ActivityLog logs={logs} />
         </div>
@@ -234,7 +287,7 @@ export default function PetHomePage() {
         {/* Achievements */}
         <div
           className="animate-fade-up w-full flex justify-center"
-          style={{ animationDelay: "0.6s" }}
+          style={{ animationDelay: '0.6s' }}
         >
           <AchievementRow achievements={achievements} />
         </div>
