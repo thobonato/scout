@@ -1,39 +1,48 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from 'next/server';
+import { createInvite, getOwnerInvites } from '@/lib/sitter-invites';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-interface SitterInviteBody {
-  email: string;
-  role: "full_access" | "view_only";
-  petId: string;
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  const petId = request.nextUrl.searchParams.get('petId');
+
+  if (!petId) {
+    return NextResponse.json({ error: 'Missing petId' }, { status: 400 });
+  }
+
+  try {
+    const invites = await getOwnerInvites(petId);
+    return NextResponse.json({ data: invites });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unexpected error';
+    const status = message === 'Unauthorized' ? 401 : 500;
+    return NextResponse.json({ error: message }, { status });
+  }
 }
 
-interface SitterInviteResponse {
-  data?: { inviteId: string; email: string };
-  error?: string;
-}
-
-// ---------------------------------------------------------------------------
-// POST /api/sitters/invite
-// ---------------------------------------------------------------------------
-export async function POST(
-  request: NextRequest,
-): Promise<NextResponse<SitterInviteResponse>> {
-  const body = (await request.json()) as Partial<SitterInviteBody>;
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  const body = await request.json();
 
   if (!body.email || !body.role || !body.petId) {
     return NextResponse.json(
-      { error: "Missing email, role, or petId" },
-      { status: 400 },
+      { error: 'Missing email, role, or petId' },
+      { status: 400 }
     );
   }
 
-  const validRoles = ["full_access", "view_only"];
+  const validRoles = ['full_access', 'view_only'];
   if (!validRoles.includes(body.role)) {
-    return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
   }
 
-  // TODO: replace with lib/sitters.ts call, e.g. sendSitterInvite(body)
-  return NextResponse.json({ error: "Not implemented" }, { status: 501 });
+  try {
+    const invite = await createInvite({
+      petId: body.petId,
+      email: body.email,
+      role: body.role,
+    });
+    return NextResponse.json({ data: invite }, { status: 201 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unexpected error';
+    const status = message === 'Unauthorized' ? 401 : 500;
+    return NextResponse.json({ error: message }, { status });
+  }
 }
