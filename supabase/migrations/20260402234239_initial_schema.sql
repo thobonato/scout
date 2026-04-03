@@ -9,20 +9,16 @@
 -- This block dynamically loops through every table in the 'public' schema and
 -- drops it. CASCADE ensures that any dependent objects (like foreign keys or
 -- views) are also safely removed.
-DO $ $ DECLARE row RECORD;
-
-BEGIN FOR row IN
-SELECT
-  tablename
-FROM
-  pg_tables
-WHERE
-  schemaname = 'public' LOOP EXECUTE 'DROP TABLE IF EXISTS public.' || quote_ident(row.tablename) || ' CASCADE';
-
-END LOOP;
-
-END $ $;
-
+-- DO $$ DECLARE row RECORD;
+-- BEGIN FOR row IN
+-- SELECT
+--   tablename
+-- FROM
+--   pg_tables
+-- WHERE
+--   schemaname = 'public' LOOP EXECUTE 'DROP TABLE IF EXISTS public.' || quote_ident(row.tablename) || ' CASCADE';
+-- END LOOP;
+-- END $$;
 -- =============================================================================
 -- 2. TABLE DEFINITIONS
 -- =============================================================================

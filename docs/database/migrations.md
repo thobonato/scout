@@ -275,9 +275,11 @@ If something goes wrong in production:
 
 1. Identify which migration caused the issue
 2. Create a new migration that fixes it:
+
    ```bash
    supabase migration new fix_production_issue
    ```
+
 3. Test locally
 4. Deploy: `supabase db push`
 
