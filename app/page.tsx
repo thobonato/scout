@@ -1,22 +1,22 @@
-'use client';
+// app/page.tsx
 
-import type { DogProfile } from '@/app/create-dog/types';
-import { loadDogProfile } from '@/lib/dog-profile';
-import { useLayoutEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 import { LandingPage } from './components/LandingPage/LandingPage';
-import { OwnerHome } from './components/OwnerHome/OwnerHome';
 
-export default function Home() {
-  const [dog, setDog] = useState<DogProfile | null>(null);
+export default async function HomePage() {
+  const supabase = await createClient();
 
-  useLayoutEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setDog(loadDogProfile());
-  }, []);
+  // Securely check if the user is authenticated via Supabase cookies
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!dog) {
-    return <LandingPage />;
+  if (user) {
+    // If they are logged in, bypass the landing page and go to the dashboard
+    redirect('/dashboard');
   }
 
-  return <OwnerHome dog={dog} />;
+  // If they are not logged in, show the marketing/landing page
+  return <LandingPage />;
 }

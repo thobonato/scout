@@ -1,8 +1,16 @@
-import { Button } from "@/components/ui/button";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomStrip } from "@/components/BottomStrip/BottomStrip";
+// app/components/LandingPage/LandingPage.tsx
 
+import { BottomStrip } from '@/components/BottomStrip/BottomStrip';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link'; // Modern practice: Use Next.js Link for SPA navigation
+
+/**
+ * The landing page for unauthenticated users.
+ * Redirects users to the login/signup flow to establish a session before
+ * interacting with pet data.
+ */
 export function LandingPage() {
   return (
     <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-nunito">
@@ -12,7 +20,7 @@ export function LandingPage() {
         {/* Chewy logo lockup */}
         <div
           className="animate-fade-up mb-10"
-          style={{ animationDelay: "0.1s" }}
+          style={{ animationDelay: '0.1s' }}
         >
           <div className="flex items-center gap-[10px] justify-center">
             <div className="animate-wag w-[42px] h-[42px]">
@@ -27,7 +35,7 @@ export function LandingPage() {
         {/* Eyebrow badge */}
         <div
           className="animate-fade-up mb-3"
-          style={{ animationDelay: "0.25s" }}
+          style={{ animationDelay: '0.25s' }}
         >
           <span className="font-nunito text-[0.85rem] font-bold tracking-[0.18em] uppercase text-chewy-orange bg-chewy-orange/10 border-[1.5px] border-chewy-orange/25 px-[14px] py-[4px] rounded-full">
             introducing
@@ -35,10 +43,10 @@ export function LandingPage() {
         </div>
 
         {/* Hero title */}
-        <div className="animate-pop-in mb-5" style={{ animationDelay: "0.4s" }}>
+        <div className="animate-pop-in mb-5" style={{ animationDelay: '0.4s' }}>
           <h1
             className="font-fredoka font-bold leading-[0.92] tracking-[-0.02em] text-text-dark relative"
-            style={{ fontSize: "clamp(5rem, 18vw, 10rem)" }}
+            style={{ fontSize: 'clamp(5rem, 18vw, 10rem)' }}
           >
             Scout
             <span className="inline-block w-[0.18em] h-[0.18em] bg-chewy-orange rounded-full align-top mt-[0.12em] ml-[0.04em]" />
@@ -48,30 +56,35 @@ export function LandingPage() {
         {/* Subheadline */}
         <div
           className="animate-fade-up mb-4"
-          style={{ animationDelay: "0.6s" }}
+          style={{ animationDelay: '0.6s' }}
         >
           <p
             className="font-fredoka font-normal text-text-mid tracking-[-0.01em]"
-            style={{ fontSize: "clamp(1.4rem, 4vw, 2rem)" }}
+            style={{ fontSize: 'clamp(1.4rem, 4vw, 2rem)' }}
           >
             Your pet&apos;s new best friend
           </p>
         </div>
 
-        {/* CTA */}
+        {/* Waitlist CTA - Optionally link to login as well */}
         <div
           className="animate-fade-up mb-6"
-          style={{ animationDelay: "0.95s" }}
+          style={{ animationDelay: '0.95s' }}
         >
-          <Button size="lg" className="rounded-full px-8 font-nunito font-bold">
-            Join the waitlist
-          </Button>
+          <Link href="/login">
+            <Button
+              size="lg"
+              className="rounded-full px-8 font-nunito font-bold cursor-pointer"
+            >
+              Join the waitlist
+            </Button>
+          </Link>
         </div>
 
         {/* Divider paws */}
         <div
           className="animate-fade-in flex gap-2 items-center my-5"
-          style={{ animationDelay: "0.75s" }}
+          style={{ animationDelay: '0.75s' }}
         >
           {[0, 1, 2].map((i) => (
             <div key={i} className="w-4 h-4 opacity-35">
@@ -83,28 +96,29 @@ export function LandingPage() {
         {/* Tagline */}
         <div
           className="animate-fade-up mb-10"
-          style={{ animationDelay: "0.85s" }}
+          style={{ animationDelay: '0.85s' }}
         >
           <p
             className="font-nunito font-semibold text-text-muted max-w-[420px] leading-relaxed"
-            style={{ fontSize: "clamp(1rem, 2.5vw, 1.2rem)" }}
+            style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)' }}
           >
             Create a routine for your dog, share it with your sitter, and watch
             them come to life.
           </p>
         </div>
 
-        {/* CTA Button */}
-        <div className="animate-fade-up" style={{ animationDelay: "1s" }}>
-          <a
-            href="/create-dog"
-            className="inline-flex items-center gap-2 bg-chewy-blue hover:bg-chewy-blue-dark text-white font-nunito font-bold px-8 py-4 rounded-full transition-colors text-lg shadow-md hover:shadow-lg"
+        {/* Primary Action Button */}
+        <div className="animate-fade-up" style={{ animationDelay: '1s' }}>
+          {/* Changed from <a> /create-dog to <Link> /login */}
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 bg-chewy-blue hover:bg-chewy-blue-dark text-white font-nunito font-bold px-8 py-4 rounded-full transition-colors text-lg shadow-md hover:shadow-lg active:scale-95"
           >
             <span className="w-5 h-5">
               <PawIcon color="#fff" opacity={1} />
             </span>
             Get Started
-          </a>
+          </Link>
         </div>
       </div>
 
