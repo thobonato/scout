@@ -1,26 +1,55 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { Share2 } from "lucide-react";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomNav } from "@/components/BottomNav/BottomNav";
-import { DogCard } from "../components/DogCard/DogCard";
-import { ShareCardModal } from "../components/ShareCardModal/ShareCardModal";
-import { HealthInsights } from "./components/HealthInsights";
-import { loadDogProfile } from "@/lib/dog-profile";
-import type { DogProfile } from "@/app/create-dog/types";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { Share2 } from 'lucide-react';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { BottomNav } from '@/components/BottomNav/BottomNav';
+import { DogCard } from '../components/DogCard/DogCard';
+import { ShareCardModal } from '../components/ShareCardModal/ShareCardModal';
+import { HealthInsights } from './components/HealthInsights';
+import type {
+  DogProfile,
+  DogGender,
+  DogSize,
+  Pet,
+} from '@/app/create-dog/types';
 
+function petToDogProfile(pet: Pet): DogProfile {
+  return {
+    name: pet.name,
+    breed: pet.breed ?? '',
+    age: pet.ageMonths ? String(Math.round(pet.ageMonths / 12)) : '',
+    photoUrl: pet.photoUrl ?? '',
+    weight: pet.weightLbs ? String(pet.weightLbs) : undefined,
+    gender: (pet.gender as DogGender) ?? undefined,
+    coatColor: pet.coatColor ?? undefined,
+    size: (pet.size as DogSize) ?? undefined,
+    medicalNotes: pet.medicalNotes ?? undefined,
+    isSpayedNeutered: pet.isSpayedNeutered,
+    avatarUrl: pet.avatarUrl ?? undefined,
+  };
+}
 
 export default function DogProfilePage() {
   const params = useParams();
   const dogId = params.id as string;
-  const [dog] = useState<DogProfile | null>(() =>
-    typeof window !== "undefined" ? loadDogProfile() : null,
-  );
+
+  const [dog, setDog] = useState<DogProfile | null>(null);
   const [isShareOpen, setIsShareOpen] = useState(false);
+
+  useEffect(() => {
+    fetch(`/api/pets/${dogId}`)
+      .then((res) => res.json())
+      .then((body: { data?: Pet }) => {
+        if (body.data) {
+          setDog(petToDogProfile(body.data));
+        }
+      })
+      .catch(() => {});
+  }, [dogId]);
 
   if (!dog) {
     return (
@@ -61,7 +90,7 @@ export default function DogProfilePage() {
         {/* Back link */}
         <div
           className="animate-fade-up w-full max-w-md mb-8"
-          style={{ animationDelay: "0.1s" }}
+          style={{ animationDelay: '0.1s' }}
         >
           <Link
             href={`/dog/${dogId}`}
@@ -74,7 +103,7 @@ export default function DogProfilePage() {
         {/* Success badge */}
         <div
           className="animate-fade-up mb-6"
-          style={{ animationDelay: "0.2s" }}
+          style={{ animationDelay: '0.2s' }}
         >
           <span className="font-nunito text-[0.85rem] font-bold tracking-[0.18em] uppercase text-chewy-orange bg-chewy-orange/10 border-[1.5px] border-chewy-orange/25 px-[14px] py-[4px] rounded-full">
             Profile Created
@@ -84,7 +113,7 @@ export default function DogProfilePage() {
         {/* Dog card */}
         <div
           className="animate-pop-in w-full max-w-md mb-8"
-          style={{ animationDelay: "0.35s" }}
+          style={{ animationDelay: '0.35s' }}
         >
           <DogCard dog={dog} />
         </div>
@@ -92,7 +121,7 @@ export default function DogProfilePage() {
         {/* Health Insights */}
         <div
           className="animate-fade-up w-full max-w-md mb-4"
-          style={{ animationDelay: "0.45s" }}
+          style={{ animationDelay: '0.45s' }}
         >
           <HealthInsights dog={dog} />
         </div>
@@ -100,7 +129,7 @@ export default function DogProfilePage() {
         {/* Action buttons */}
         <div
           className="animate-fade-up w-full max-w-md flex flex-col gap-3"
-          style={{ animationDelay: "0.5s" }}
+          style={{ animationDelay: '0.5s' }}
         >
           <button
             onClick={() => setIsShareOpen(true)}

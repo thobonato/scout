@@ -49,6 +49,24 @@ export async function getSitterSessions(
   return (data as SitterSessionRow[]).map(toSitterSession);
 }
 
+export async function getSitterSessionById(
+  sessionId: string
+): Promise<SitterSession | null> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('sitter_sessions')
+    .select('*')
+    .eq('id', sessionId)
+    .single();
+
+  if (error) {
+    return null;
+  }
+
+  return toSitterSession(data as SitterSessionRow);
+}
+
 interface CreateSessionInput {
   petId: string;
   sitterId: string;
