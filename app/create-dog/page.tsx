@@ -1,12 +1,22 @@
-"use client";
+import { BottomStrip } from '@/components/BottomStrip/BottomStrip';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import { createClient } from '@/lib/supabase/server';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { DogProfileForm } from './components/DogProfileForm/DogProfileForm';
 
-import Link from "next/link";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomStrip } from "@/components/BottomStrip/BottomStrip";
-import { DogProfileForm } from "./components/DogProfileForm/DogProfileForm";
+export default async function CreateDogPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-export default function CreateDogPage() {
+  // If not logged in, redirect to login with a return path
+  if (!user) {
+    redirect('/login?error=Please sign in to create a pet profile');
+  }
+
   return (
     <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center font-nunito">
       <PageBackground />
@@ -16,7 +26,7 @@ export default function CreateDogPage() {
         {/* Back link */}
         <div
           className="animate-fade-up w-full max-w-md mb-8"
-          style={{ animationDelay: "0.1s" }}
+          style={{ animationDelay: '0.1s' }}
         >
           <Link
             href="/"
@@ -29,7 +39,7 @@ export default function CreateDogPage() {
         {/* Header */}
         <div
           className="animate-fade-up flex flex-col items-center gap-3 mb-8"
-          style={{ animationDelay: "0.2s" }}
+          style={{ animationDelay: '0.2s' }}
         >
           <div className="animate-wag w-10 h-10">
             <PawIcon color="var(--chewy-blue)" opacity={1} />
@@ -45,7 +55,7 @@ export default function CreateDogPage() {
         {/* Form card */}
         <div
           className="animate-fade-up w-full max-w-md"
-          style={{ animationDelay: "0.35s" }}
+          style={{ animationDelay: '0.35s' }}
         >
           <div className="bg-warm-white rounded-2xl p-8 shadow-sm border border-black/5">
             <DogProfileForm />

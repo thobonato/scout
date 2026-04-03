@@ -1,36 +1,66 @@
-"use client";
+// app/dashboard/page.tsx
 
-import { useState } from "react";
-import Link from "next/link";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomNav } from "@/components/BottomNav/BottomNav";
-import { DogSummary } from "./components/DogSummary/DogSummary";
-import { RoutineOverview } from "./components/RoutineOverview/RoutineOverview";
-import { SitterLink } from "./components/SitterLink/SitterLink";
-import { SitterActivityFeed } from "./components/SitterActivityFeed/SitterActivityFeed";
-import { getAllLogs } from "@/lib/actions";
-import { loadSitterSessions } from "@/lib/sitter-sessions";
-import { loadDogProfile } from "@/lib/dog-profile";
-import type { DogProfile } from "@/app/create-dog/types";
-import type { ActionLog } from "@/app/dog/[id]/home/types";
-import type { SitterSession } from "./types";
+import { BottomNav } from '@/components/BottomNav/BottomNav';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import { createClient } from '@/lib/supabase/server';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import type { ActionLog } from '@/app/dog/[id]/home/types';
+import type { SitterSession } from './types';
+import { DogSummary } from './components/DogSummary/DogSummary';
+import { RoutineOverview } from './components/RoutineOverview/RoutineOverview';
+import { SitterActivityFeed } from './components/SitterActivityFeed/SitterActivityFeed';
+import { SitterLink } from './components/SitterLink/SitterLink';
 
-export default function DashboardPage() {
-  const [dog] = useState<DogProfile | null>(() =>
-    typeof window !== "undefined" ? loadDogProfile() : null,
-  );
-  const [logs] = useState<ActionLog[]>(() =>
-    typeof window !== "undefined" ? getAllLogs() : [],
-  );
-  const [sessions] = useState<SitterSession[]>(() =>
-    typeof window !== "undefined"
-      ? loadSitterSessions()
-          .filter((s) => s.dogId === "temp")
-          .reverse()
-      : [],
-  );
+export default async function DashboardPage() {
+  const supabase = await createClient();
 
+  // 1. Authenticate the user securely on the server
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    // Redirect to your login or landing page if not authenticated
+    redirect('/');
+  }
+
+  // 2. Fetch the user's dog. We query the 'pets' table.
+  // Your RLS policy "Owner can view own pet" ensures they only see their dogs.
+  const { data: pets } = await supabase
+    .from('pets')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  const dog = pets?.[0] || null;
+
+  // 3. Fetch logs and sessions only if a dog exists
+  // We use Promise.all to fetch these concurrently, drastically improving load times
+  // TODO (pet CRUD commit): map Supabase snake_case rows to these camelCase types
+  let logs: ActionLog[] = [];
+  let sessions: SitterSession[] = [];
+
+  if (dog) {
+    const [logsResponse, sessionsResponse] = await Promise.all([
+      supabase
+        .from('action_logs')
+        .select('*')
+        .eq('pet_id', dog.id)
+        .order('logged_at', { ascending: false }),
+      supabase
+        .from('sitter_sessions')
+        .select('*')
+        .eq('pet_id', dog.id)
+        .order('created_at', { ascending: false }),
+    ]);
+
+    logs = logsResponse.data || [];
+    sessions = sessionsResponse.data || [];
+  }
+
+  // Handle the empty state exactly as your UI originally designed it
   if (!dog) {
     return (
       <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-nunito">
@@ -62,6 +92,7 @@ export default function DashboardPage() {
     );
   }
 
+  // Render the populated dashboard
   return (
     <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center font-nunito">
       <PageBackground />
@@ -84,31 +115,32 @@ export default function DashboardPage() {
         {/* Dog summary */}
         <div
           className="animate-fade-up w-full"
-          style={{ animationDelay: "0.1s" }}
+          style={{ animationDelay: '0.1s' }}
         >
+          {/* Note: Ensure the DogSummary component can accept the new Supabase row schema */}
           <DogSummary dog={dog} />
         </div>
 
         {/* Routine overview */}
         <div
           className="animate-fade-up w-full"
-          style={{ animationDelay: "0.2s" }}
+          style={{ animationDelay: '0.2s' }}
         >
-          <RoutineOverview />
+          <RoutineOverview dogId={dog.id} />
         </div>
 
-        {/* Sitter links */}
+        {/* Sitter links - dynamically using the actual DB ID instead of 'temp' */}
         <div
           className="animate-fade-up w-full"
-          style={{ animationDelay: "0.3s" }}
+          style={{ animationDelay: '0.3s' }}
         >
-          <SitterLink dogId="temp" />
+          <SitterLink dogId={dog.id} />
         </div>
 
         {/* Sitter activity feed */}
         <div
           className="animate-fade-up w-full"
-          style={{ animationDelay: "0.4s" }}
+          style={{ animationDelay: '0.4s' }}
         >
           <SitterActivityFeed logs={logs} sessions={sessions} />
         </div>
