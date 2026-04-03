@@ -1,7 +1,7 @@
-import type { GenerateAvatarResult } from "@/lib/avatar";
+import type { GenerateAvatarResult } from '@/lib/avatar';
 
 export interface AvatarRequest {
-  photoDataUrl: string;
+  petId: string;
 }
 
 export type AvatarResponse = { data: GenerateAvatarResult } | { error: string };
