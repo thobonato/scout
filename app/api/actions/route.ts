@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { getTodayLogs, logAction } from '@/lib/actions';
+import { getAllLogs, getTodayLogs, logAction } from '@/lib/actions';
 import type { GetActionsResponse, LogActionResponse } from './types';
 
 export async function GET(
@@ -12,8 +12,10 @@ export async function GET(
     return NextResponse.json({ error: 'Missing petId' }, { status: 400 });
   }
 
+  const all = request.nextUrl.searchParams.get('all') === 'true';
+
   try {
-    const logs = await getTodayLogs(petId);
+    const logs = all ? await getAllLogs(petId) : await getTodayLogs(petId);
     return NextResponse.json({ data: logs });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unexpected error';

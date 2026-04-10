@@ -1,11 +1,14 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import { Calendar, Clock } from 'lucide-react';
 import { PawIcon } from '@/components/PawIcon/PawIcon';
 import { PageBackground } from '@/components/PageBackground/PageBackground';
 import { BottomNav } from '@/components/BottomNav/BottomNav';
-import { getSitterSessionById } from '@/lib/sitter-sessions';
-import { getAllLogs } from '@/lib/actions';
+import type { SitterSession } from '@/app/dashboard/types';
 import type { ActionLog } from '@/app/dog/[id]/home/types';
 
 const categoryIcons: Record<string, string> = {
@@ -74,14 +77,53 @@ function groupByDate(logs: ActionLog[]): Record<string, ActionLog[]> {
   return groups;
 }
 
-export default async function SessionDetailPage({
-  params,
-}: {
-  params: Promise<{ sessionId: string }>;
-}) {
-  const { sessionId } = await params;
+export default function SessionDetailPage() {
+  const params = useParams();
+  const sessionId = params.sessionId as string;
 
-  const session = await getSitterSessionById(sessionId);
+  const [session, setSession] = useState<SitterSession | null | 'loading'>(
+    'loading'
+  );
+  const [logs, setLogs] = useState<ActionLog[]>([]);
+
+  useEffect(() => {
+    fetch(`/api/sitters/sessions/${sessionId}`)
+      .then((res) => res.json())
+      .then((body: { data?: SitterSession }) => {
+        if (!body.data) {
+          setSession(null);
+          return;
+        }
+
+        setSession(body.data);
+
+        fetch(`/api/actions?petId=${body.data.petId}&all=true`)
+          .then((r) => r.json())
+          .then((actionsBody: { data?: ActionLog[] }) => {
+            const sessionLogs = (actionsBody.data ?? [])
+              .filter((l) => l.sessionId === sessionId)
+              .sort(
+                (a, b) =>
+                  new Date(b.timestamp).getTime() -
+                  new Date(a.timestamp).getTime()
+              );
+            setLogs(sessionLogs);
+          })
+          .catch(() => {});
+      })
+      .catch(() => setSession(null));
+  }, [sessionId]);
+
+  if (session === 'loading') {
+    return (
+      <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-nunito">
+        <PageBackground />
+        <div className="relative z-10 w-8 h-8 opacity-30 animate-pulse">
+          <PawIcon color="var(--chewy-blue)" opacity={1} />
+        </div>
+      </div>
+    );
+  }
 
   if (!session) {
     return (
@@ -105,14 +147,6 @@ export default async function SessionDetailPage({
       </div>
     );
   }
-
-  const allLogs = await getAllLogs(session.petId);
-  const logs = allLogs
-    .filter((l) => l.sessionId === sessionId)
-    .sort(
-      (a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
 
   const feedCount = logs.filter((l) => l.category === 'feed').length;
   const playCount = logs.filter((l) => l.category === 'play').length;
@@ -224,7 +258,7 @@ export default async function SessionDetailPage({
                   {dayLogs.map((log) => (
                     <div key={log.id} className="flex items-start gap-3 py-1.5">
                       <span className="text-lg mt-0.5">
-                        {categoryIcons[log.category] || '📋'}
+                        {categoryIcons[log.category] ?? '📋'}
                       </span>
 
                       <div className="flex-1 min-w-0">
