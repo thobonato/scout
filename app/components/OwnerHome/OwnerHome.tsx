@@ -174,7 +174,7 @@ export function OwnerHome({ dog, petId }: OwnerHomeProps) {
           </h3>
 
           <QuickAction
-            href="/dog/temp"
+            href={`/dog/${petId}`}
             icon={Dog}
             label="Pet Home"
             description="Feed, play, give meds"
