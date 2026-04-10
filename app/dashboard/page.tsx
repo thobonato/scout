@@ -178,6 +178,7 @@ export default async function DashboardPage() {
     );
   }
 
+  // dog is guaranteed non-null past this point
   return (
     <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center font-nunito">
       <PageBackground />
@@ -226,7 +227,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <BottomNav />
+      <BottomNav petId={dog.id} />
     </div>
   );
 }

@@ -77,7 +77,7 @@ export default function DogProfilePage() {
           </Link>
         </div>
 
-        <BottomNav />
+        <BottomNav petId={dogId} />
       </div>
     );
   }
