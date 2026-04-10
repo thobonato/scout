@@ -34,7 +34,7 @@ const NAV_ITEMS: NavItem[] = [
     href: "/dog/temp/profile",
     label: "Profile",
     icon: User,
-    matchPaths: ["/profile"],
+    matchPaths: ["/profile", "/discounts"],
   },
 ];
 

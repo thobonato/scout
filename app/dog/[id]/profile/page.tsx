@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Share2 } from "lucide-react";
+import { Share2, Gift } from "lucide-react";
 import { PawIcon } from "@/components/PawIcon/PawIcon";
 import { PageBackground } from "@/components/PageBackground/PageBackground";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
@@ -12,7 +12,6 @@ import { ShareCardModal } from "../components/ShareCardModal/ShareCardModal";
 import { HealthInsights } from "./components/HealthInsights";
 import { loadDogProfile } from "@/lib/dog-profile";
 import type { DogProfile } from "@/app/create-dog/types";
-
 
 export default function DogProfilePage() {
   const params = useParams();
@@ -97,10 +96,36 @@ export default function DogProfilePage() {
           <HealthInsights dog={dog} />
         </div>
 
+        {/* Chewy Rewards link */}
+        <div
+          className="animate-fade-up w-full max-w-md"
+          style={{ animationDelay: "0.5s" }}
+        >
+          <Link
+            href="/discounts"
+            className="flex items-center gap-4 bg-warm-white rounded-2xl p-4 shadow-sm border border-black/5 hover:shadow-md transition-shadow"
+          >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-chewy-orange/10 text-chewy-orange">
+              <Gift size={20} strokeWidth={2.5} />
+            </div>
+            <div className="flex-1">
+              <span className="font-nunito text-sm font-bold text-text-dark block">
+                Chewy Rewards
+              </span>
+              <span className="font-nunito text-xs text-text-muted">
+                Earn points, unlock discounts
+              </span>
+            </div>
+            <span className="font-nunito text-xs text-text-muted">
+              &rsaquo;
+            </span>
+          </Link>
+        </div>
+
         {/* Action buttons */}
         <div
           className="animate-fade-up w-full max-w-md flex flex-col gap-3"
-          style={{ animationDelay: "0.5s" }}
+          style={{ animationDelay: "0.55s" }}
         >
           <button
             onClick={() => setIsShareOpen(true)}
