@@ -1,33 +1,38 @@
-"use client";
+// app/create-dog/components/DogProfileForm/DogProfileForm.tsx
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { PhotoUpload } from "../PhotoUpload/PhotoUpload";
-import { DogBasicFields } from "../DogBasicFields/DogBasicFields";
-import { DogDetailFields } from "../DogDetailFields/DogDetailFields";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import type { DogProfile, DogGender, DogSize } from "../../types";
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import type { DogGender, DogProfile, DogSize } from '../../types';
+import { DogBasicFields } from '../DogBasicFields/DogBasicFields';
+import { DogDetailFields } from '../DogDetailFields/DogDetailFields';
+import { PhotoUpload } from '../PhotoUpload/PhotoUpload';
 
 export function DogProfileForm() {
   const router = useRouter();
 
-  const [name, setName] = useState("");
-  const [breed, setBreed] = useState("");
-  const [age, setAge] = useState("");
-  const [weight, setWeight] = useState("");
-  const [gender, setGender] = useState<DogGender>("unknown");
-  const [size, setSize] = useState<DogSize>("medium");
-  const [coatColor, setCoatColor] = useState("");
-  const [personality, setPersonality] = useState("");
-  const [medicalNotes, setMedicalNotes] = useState("");
+  const [name, setName] = useState('');
+  const [breed, setBreed] = useState('');
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [gender, setGender] = useState<DogGender>('unknown');
+  const [size, setSize] = useState<DogSize>('medium');
+  const [coatColor, setCoatColor] = useState('');
+  const [personality, setPersonality] = useState('');
+  const [medicalNotes, setMedicalNotes] = useState('');
   const [isSpayedNeutered, setIsSpayedNeutered] = useState(false);
-  const [photoUrl, setPhotoUrl] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [error, setError] = useState("");
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
 
-  function handleSubmit(event: React.FormEvent): void {
+  // State for handling async API operations
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleSubmit(event: React.FormEvent): Promise<void> {
     event.preventDefault();
-    setError("");
+    setError('');
 
     if (!name.trim()) {
       setError("Please enter your dog's name");
@@ -38,6 +43,8 @@ export function DogProfileForm() {
       setError("Please enter your dog's breed");
       return;
     }
+
+    setIsSubmitting(true);
 
     const dogProfile: DogProfile = {
       name: name.trim(),
@@ -54,19 +61,38 @@ export function DogProfileForm() {
       avatarUrl,
     };
 
-    localStorage.setItem("scout_dog_profile", JSON.stringify(dogProfile));
-    router.push("/dog/temp/profile");
+    try {
+      const response = await fetch('/api/pets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dogProfile),
+      });
+
+      if (!response.ok) {
+        const json = (await response.json()) as { error?: string };
+        throw new Error(json.error ?? 'Failed to create profile');
+      }
+
+      router.push('/dashboard');
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const inputClasses =
-    "w-full px-4 py-3 rounded-xl border border-black/10 bg-warm-white font-nunito text-text-dark placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-chewy-blue/30 focus:border-chewy-blue/40 transition-all";
+    'w-full px-4 py-3 rounded-xl border border-black/10 bg-warm-white font-nunito text-text-dark placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-chewy-blue/30 focus:border-chewy-blue/40 transition-all';
 
   return (
     <form
       onSubmit={handleSubmit}
       className="w-full max-w-md flex flex-col gap-6"
     >
-      {/* Photo upload */}
       <div className="flex justify-center">
         <PhotoUpload
           photoUrl={photoUrl}
@@ -75,7 +101,6 @@ export function DogProfileForm() {
         />
       </div>
 
-      {/* Basic info */}
       <DogBasicFields
         name={name}
         onNameChange={setName}
@@ -94,10 +119,8 @@ export function DogProfileForm() {
         inputClasses={inputClasses}
       />
 
-      {/* Section divider */}
       <div className="border-t border-black/5" />
 
-      {/* Detail fields */}
       <DogDetailFields
         personality={personality}
         onPersonalityChange={setPersonality}
@@ -108,22 +131,27 @@ export function DogProfileForm() {
         inputClasses={inputClasses}
       />
 
-      {/* Error message */}
       {error && (
         <p className="font-nunito text-sm font-semibold text-red-500 text-center">
           {error}
         </p>
       )}
 
-      {/* Submit */}
       <button
         type="submit"
-        className="w-full flex items-center justify-center gap-3 bg-chewy-blue hover:bg-chewy-blue-dark text-white font-nunito font-bold px-8 py-5 rounded-full transition-colors text-lg shadow-md hover:shadow-lg"
+        disabled={isSubmitting}
+        className={`w-full flex items-center justify-center gap-3 font-nunito font-bold px-8 py-5 rounded-full transition-colors text-lg shadow-md ${
+          isSubmitting
+            ? 'bg-gray-400 cursor-not-allowed text-white/80'
+            : 'bg-chewy-blue hover:bg-chewy-blue-dark text-white hover:shadow-lg'
+        }`}
       >
-        <span className="w-5 h-5">
-          <PawIcon color="#fff" opacity={1} />
-        </span>
-        Create Profile
+        {!isSubmitting && (
+          <span className="w-5 h-5">
+            <PawIcon color="#fff" opacity={1} />
+          </span>
+        )}
+        {isSubmitting ? 'Creating Profile...' : 'Create Profile'}
       </button>
     </form>
   );

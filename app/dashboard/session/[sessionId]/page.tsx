@@ -1,28 +1,26 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useParams } from "next/navigation";
-import { Calendar, Clock } from "lucide-react";
-import { PawIcon } from "@/components/PawIcon/PawIcon";
-import { PageBackground } from "@/components/PageBackground/PageBackground";
-import { BottomNav } from "@/components/BottomNav/BottomNav";
-import { loadSitterSessions } from "@/lib/sitter-sessions";
-import { getAllLogs } from "@/lib/actions";
-import type { SitterSession } from "../../types";
-import type { ActionLog } from "@/app/dog/[id]/home/types";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { Calendar, Clock } from 'lucide-react';
+import { PawIcon } from '@/components/PawIcon/PawIcon';
+import { PageBackground } from '@/components/PageBackground/PageBackground';
+import { BottomNav } from '@/components/BottomNav/BottomNav';
+import type { SitterSession } from '@/app/dashboard/types';
+import type { ActionLog } from '@/app/dog/[id]/home/types';
 
 const categoryIcons: Record<string, string> = {
-  feed: "🍖",
-  play: "🎾",
-  medicine: "💊",
+  feed: '🍖',
+  play: '🎾',
+  medicine: '💊',
 };
 
 function formatTime(timestamp: string): string {
-  return new Date(timestamp).toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
+  return new Date(timestamp).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
     hour12: true,
   });
 }
@@ -39,36 +37,36 @@ function formatDateLabel(dateKey: string): string {
   dateOnly.setHours(0, 0, 0, 0);
 
   if (dateOnly.getTime() === today.getTime()) {
-    return "Today";
+    return 'Today';
   }
   if (dateOnly.getTime() === yesterday.getTime()) {
-    return "Yesterday";
+    return 'Yesterday';
   }
 
-  return date.toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
+  return date.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
   });
 }
 
 function formatDateRange(start: string, end: string): string {
   const startDate = new Date(`${start}T00:00:00`);
   const endDate = new Date(`${end}T00:00:00`);
-  const opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
+  const opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
 
   if (start === end) {
-    return startDate.toLocaleDateString("en-US", opts);
+    return startDate.toLocaleDateString('en-US', opts);
   }
 
-  return `${startDate.toLocaleDateString("en-US", opts)} – ${endDate.toLocaleDateString("en-US", opts)}`;
+  return `${startDate.toLocaleDateString('en-US', opts)} – ${endDate.toLocaleDateString('en-US', opts)}`;
 }
 
 function groupByDate(logs: ActionLog[]): Record<string, ActionLog[]> {
   const groups: Record<string, ActionLog[]> = {};
 
   for (const log of logs) {
-    const dateKey = new Date(log.timestamp).toLocaleDateString("en-CA");
+    const dateKey = new Date(log.timestamp).toLocaleDateString('en-CA');
 
     if (!groups[dateKey]) {
       groups[dateKey] = [];
@@ -83,24 +81,49 @@ export default function SessionDetailPage() {
   const params = useParams();
   const sessionId = params.sessionId as string;
 
-  const [session] = useState<SitterSession | null>(() => {
-    if (typeof window === "undefined") {
-      return null;
-    }
-    return loadSitterSessions().find((s) => s.id === sessionId) || null;
-  });
+  const [session, setSession] = useState<SitterSession | null | 'loading'>(
+    'loading'
+  );
+  const [logs, setLogs] = useState<ActionLog[]>([]);
 
-  const [logs] = useState<ActionLog[]>(() => {
-    if (typeof window === "undefined") {
-      return [];
-    }
-    return getAllLogs()
-      .filter((l) => l.sessionId === sessionId)
-      .sort(
-        (a, b) =>
-          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-      );
-  });
+  useEffect(() => {
+    fetch(`/api/sitters/sessions/${sessionId}`)
+      .then((res) => res.json())
+      .then((body: { data?: SitterSession }) => {
+        if (!body.data) {
+          setSession(null);
+          return;
+        }
+
+        setSession(body.data);
+
+        fetch(`/api/actions?petId=${body.data.petId}&all=true`)
+          .then((r) => r.json())
+          .then((actionsBody: { data?: ActionLog[] }) => {
+            const sessionLogs = (actionsBody.data ?? [])
+              .filter((l) => l.sessionId === sessionId)
+              .sort(
+                (a, b) =>
+                  new Date(b.timestamp).getTime() -
+                  new Date(a.timestamp).getTime()
+              );
+            setLogs(sessionLogs);
+          })
+          .catch(() => {});
+      })
+      .catch(() => setSession(null));
+  }, [sessionId]);
+
+  if (session === 'loading') {
+    return (
+      <div className="bg-page min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-nunito">
+        <PageBackground />
+        <div className="relative z-10 w-8 h-8 opacity-30 animate-pulse">
+          <PawIcon color="var(--chewy-blue)" opacity={1} />
+        </div>
+      </div>
+    );
+  }
 
   if (!session) {
     return (
@@ -125,13 +148,10 @@ export default function SessionDetailPage() {
     );
   }
 
-  const feedCount = logs.filter((l) => l.category === "feed").length;
-  const playCount = logs.filter((l) => l.category === "play").length;
-  const medCount = logs.filter((l) => l.category === "medicine").length;
+  const feedCount = logs.filter((l) => l.category === 'feed').length;
+  const playCount = logs.filter((l) => l.category === 'play').length;
+  const medCount = logs.filter((l) => l.category === 'medicine').length;
   const photoCount = logs.filter((l) => l.photoUrl).length;
-  const isActive =
-    session.startDate <= new Date().toLocaleDateString("en-CA") &&
-    session.endDate >= new Date().toLocaleDateString("en-CA");
 
   const grouped = groupByDate(logs);
   const dateKeys = Object.keys(grouped).sort().reverse();
@@ -149,7 +169,7 @@ export default function SessionDetailPage() {
           >
             &larr; Dashboard
           </Link>
-          {isActive && (
+          {session.isActive && (
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-chewy-blue animate-pulse" />
               <span className="font-nunito text-xs font-bold text-chewy-blue uppercase">
@@ -162,7 +182,7 @@ export default function SessionDetailPage() {
         {/* Session info card */}
         <div className="animate-fade-up w-full bg-warm-white rounded-2xl p-6 shadow-sm border border-black/5">
           <h1 className="font-fredoka text-2xl font-semibold text-text-dark mb-3">
-            {session.label}
+            {formatDateRange(session.startDate, session.endDate)}
           </h1>
 
           <div className="flex flex-col gap-2 mb-5">
@@ -205,7 +225,7 @@ export default function SessionDetailPage() {
         {dateKeys.length === 0 ? (
           <div
             className="animate-fade-up w-full bg-warm-white rounded-2xl p-6 shadow-sm border border-black/5"
-            style={{ animationDelay: "0.15s" }}
+            style={{ animationDelay: '0.15s' }}
           >
             <p className="font-nunito text-sm text-text-muted/60 text-center py-4">
               No activity logged in this session yet.
@@ -228,8 +248,8 @@ export default function SessionDetailPage() {
                   </span>
                   <div className="flex-1 h-px bg-black/5" />
                   <span className="font-nunito text-xs text-text-muted">
-                    {dayLogs.length}{" "}
-                    {dayLogs.length === 1 ? "action" : "actions"}
+                    {dayLogs.length}{' '}
+                    {dayLogs.length === 1 ? 'action' : 'actions'}
                   </span>
                 </div>
 
@@ -238,7 +258,7 @@ export default function SessionDetailPage() {
                   {dayLogs.map((log) => (
                     <div key={log.id} className="flex items-start gap-3 py-1.5">
                       <span className="text-lg mt-0.5">
-                        {categoryIcons[log.category] || "📋"}
+                        {categoryIcons[log.category] ?? '📋'}
                       </span>
 
                       <div className="flex-1 min-w-0">
@@ -270,7 +290,7 @@ export default function SessionDetailPage() {
         )}
       </div>
 
-      <BottomNav />
+      <BottomNav petId={session.petId} />
     </div>
   );
 }

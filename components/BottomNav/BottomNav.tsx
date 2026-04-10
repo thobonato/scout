@@ -1,56 +1,51 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, Dog, ClipboardList, User } from "lucide-react";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Home, Dog, ClipboardList, User } from 'lucide-react';
+
+type NavKey = 'home' | 'pet' | 'sitters' | 'profile';
 
 interface NavItem {
+  key: NavKey;
   href: string;
   label: string;
   icon: typeof Home;
-  matchPaths: string[];
 }
 
-const NAV_ITEMS: NavItem[] = [
-  {
-    href: "/",
-    label: "Home",
-    icon: Home,
-    matchPaths: ["/"],
-  },
-  {
-    href: "/dog/temp",
-    label: "Pet",
-    icon: Dog,
-    matchPaths: ["/dog/"],
-  },
-  {
-    href: "/dashboard",
-    label: "Sitters",
-    icon: ClipboardList,
-    matchPaths: ["/dashboard"],
-  },
-  {
-    href: "/dog/temp/profile",
-    label: "Profile",
-    icon: User,
-    matchPaths: ["/profile"],
-  },
-];
+interface BottomNavProps {
+  petId?: string;
+}
 
-export function BottomNav() {
+export function BottomNav({ petId }: BottomNavProps) {
   const pathname = usePathname();
 
+  const petHref = petId ? `/dog/${petId}` : '/dog';
+  const profileHref = petId ? `/dog/${petId}/profile` : '/dog/profile';
+
+  const NAV_ITEMS: NavItem[] = [
+    { key: 'home', href: '/', label: 'Home', icon: Home },
+    { key: 'pet', href: petHref, label: 'Pet', icon: Dog },
+    {
+      key: 'sitters',
+      href: '/dashboard',
+      label: 'Sitters',
+      icon: ClipboardList,
+    },
+    { key: 'profile', href: profileHref, label: 'Profile', icon: User },
+  ];
+
   function isActive(item: NavItem): boolean {
-    if (item.href === "/" && pathname === "/") {
-      return true;
+    switch (item.key) {
+      case 'home':
+        return pathname === '/';
+      case 'pet':
+        return pathname.startsWith('/dog/') && !pathname.endsWith('/profile');
+      case 'sitters':
+        return pathname === '/dashboard' || pathname.startsWith('/dashboard/');
+      case 'profile':
+        return pathname.startsWith('/dog/') && pathname.endsWith('/profile');
     }
-
-    if (item.href === "/") {
-      return false;
-    }
-
-    return item.matchPaths.some((path) => pathname.startsWith(path));
   }
 
   return (
@@ -62,18 +57,18 @@ export function BottomNav() {
 
           return (
             <Link
-              key={item.href}
+              key={item.key}
               href={item.href}
               className={`flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition-colors ${
                 active
-                  ? "text-chewy-blue"
-                  : "text-text-muted hover:text-text-mid"
+                  ? 'text-chewy-blue'
+                  : 'text-text-muted hover:text-text-mid'
               }`}
             >
               <Icon size={22} strokeWidth={active ? 2.5 : 2} />
               <span
                 className={`font-nunito text-[10px] ${
-                  active ? "font-bold" : "font-semibold"
+                  active ? 'font-bold' : 'font-semibold'
                 }`}
               >
                 {item.label}

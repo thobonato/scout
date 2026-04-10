@@ -1,80 +1,99 @@
-import type {
-  ActionCategory,
-  ActionLog,
-  CareItem,
-} from "@/app/dog/[id]/home/types";
+import { createClient } from '@/lib/supabase/server';
+import type { ActionCategory, ActionLog } from '@/app/dog/[id]/home/types';
+export { getItemsByCategory } from '@/lib/care-items';
 
-const STORAGE_KEY = "scout_action_log";
-
-// Default items per category
-const DEFAULT_ITEMS: CareItem[] = [
-  { id: "feed-kibble", category: "feed", name: "Kibble", icon: "🍖" },
-  { id: "feed-wet", category: "feed", name: "Wet Food", icon: "🥫" },
-  { id: "feed-treat", category: "feed", name: "Treat", icon: "🦴" },
-  { id: "feed-custom", category: "feed", name: "Custom", icon: "🍽️" },
-  { id: "play-fetch", category: "play", name: "Fetch", icon: "🎾" },
-  { id: "play-tug", category: "play", name: "Tug", icon: "🪢" },
-  { id: "play-walk", category: "play", name: "Walk", icon: "🚶" },
-  { id: "play-free", category: "play", name: "Free Play", icon: "🐕" },
-  { id: "med-morning", category: "medicine", name: "Morning Meds", icon: "💊" },
-  { id: "med-evening", category: "medicine", name: "Evening Meds", icon: "💊" },
-  {
-    id: "med-supplement",
-    category: "medicine",
-    name: "Supplement",
-    icon: "🧴",
-  },
-  { id: "med-custom", category: "medicine", name: "Custom", icon: "🩺" },
-];
-
-export function getItemsByCategory(category: ActionCategory): CareItem[] {
-  return DEFAULT_ITEMS.filter((item) => item.category === category);
+interface ActionLogRow {
+  id: string;
+  activity_type: string;
+  item_name: string;
+  logged_at: string;
+  photo_url: string | null;
+  session_id: string | null;
 }
 
-export function getAllLogs(): ActionLog[] {
-  const stored = globalThis.localStorage?.getItem(STORAGE_KEY);
-
-  if (!stored) {
-    return [];
-  }
-
-  return JSON.parse(stored) as ActionLog[];
+function toActionLog(row: ActionLogRow): ActionLog {
+  return {
+    id: row.id,
+    category: row.activity_type as ActionCategory,
+    itemName: row.item_name,
+    timestamp: row.logged_at,
+    photoUrl: row.photo_url ?? undefined,
+    sessionId: row.session_id ?? undefined,
+  };
 }
 
-export function getTodayLogs(): ActionLog[] {
-  const stored = globalThis.localStorage?.getItem(STORAGE_KEY);
+export async function getTodayLogs(petId: string): Promise<ActionLog[]> {
+  const supabase = await createClient();
 
-  if (!stored) {
-    return [];
-  }
-
-  const allLogs = JSON.parse(stored) as ActionLog[];
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 
-  return allLogs.filter((log) => new Date(log.timestamp) >= todayStart);
+  const { data, error } = await supabase
+    .from('action_logs')
+    .select('id, activity_type, item_name, logged_at, photo_url, session_id')
+    .eq('pet_id', petId)
+    .gte('logged_at', todayStart.toISOString())
+    .order('logged_at', { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data as ActionLogRow[]).map(toActionLog);
 }
 
-export function logAction(
+export async function getAllLogs(petId: string): Promise<ActionLog[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('action_logs')
+    .select('id, activity_type, item_name, logged_at, photo_url, session_id')
+    .eq('pet_id', petId)
+    .order('logged_at', { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data as ActionLogRow[]).map(toActionLog);
+}
+
+export async function logAction(
+  petId: string,
   category: ActionCategory,
   itemName: string,
   photoUrl?: string,
-  sessionId?: string,
-): ActionLog {
-  const newLog: ActionLog = {
-    id: crypto.randomUUID(),
-    category,
-    itemName,
-    timestamp: new Date().toISOString(),
-    photoUrl,
-    sessionId,
-  };
+  sessionId?: string
+): Promise<ActionLog> {
+  const supabase = await createClient();
 
-  const stored = globalThis.localStorage?.getItem(STORAGE_KEY);
-  const allLogs = stored ? (JSON.parse(stored) as ActionLog[]) : [];
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  allLogs.push(newLog);
-  globalThis.localStorage?.setItem(STORAGE_KEY, JSON.stringify(allLogs));
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
 
-  return newLog;
+  const { data, error } = await supabase
+    .from('action_logs')
+    .insert([
+      {
+        pet_id: petId,
+        logger_id: user.id,
+        activity_type: category,
+        item_name: itemName,
+        logged_at: new Date().toISOString(),
+        photo_url: photoUrl ?? null,
+        session_id: sessionId ?? null,
+      },
+    ])
+    .select('id, activity_type, item_name, logged_at, photo_url, session_id')
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return toActionLog(data as ActionLogRow);
 }
