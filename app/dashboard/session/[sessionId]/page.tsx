@@ -256,7 +256,7 @@ export default async function SessionDetailPage({
         )}
       </div>
 
-      <BottomNav />
+      <BottomNav petId={session.petId} />
     </div>
   );
 }

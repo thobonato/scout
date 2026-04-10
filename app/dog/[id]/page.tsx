@@ -206,7 +206,7 @@ export default function PetHomePage() {
           </Link>
         </div>
 
-        <BottomNav />
+        <BottomNav petId={dogId} />
       </div>
     );
   }

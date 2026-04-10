@@ -275,7 +275,7 @@ export function OwnerHome({ dog, petId }: OwnerHomeProps) {
         )}
       </div>
 
-      <BottomNav />
+      <BottomNav petId={petId} />
     </div>
   );
 }
